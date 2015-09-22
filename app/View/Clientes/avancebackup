@@ -1,0 +1,388 @@
+<?php echo $this->Html->script('clientes/avance',array('inline'=>false));?>
+<?php echo $this->Html->script('http://code.jquery.com/ui/1.10.1/jquery-ui.js',array('inline'=>false));?>
+<input class="button" type="button" id="btnShowForm" onClick="showForm()" value="Mostrar" style="display:none" />
+
+<div id="Formhead" class="clientes avanse">
+
+	<input class="button" type="button" id="btnHiddeForm" onClick="hideForm()" value="Ocultar"/>
+	<?php echo $this->Form->create('clientes',array('action' => 'avance')); ?> 
+		<table class="tbl_avance">
+        <tr>
+        	<td><h3></h3> </td>
+            <td><h3></h3> </td>
+        </tr>
+        <tr>
+        	
+            <td>
+              <label>seleccionar todos</label>
+              <input type="checkbox" id="select_all_gcli"/>
+              <?php
+                echo $this->Form->input('gclis', array(
+                    'multiple' => 'multiple',
+                    'type' => 'select',
+                    'label' => 'Grupos de clientes' 
+                ));?>
+                
+            </td>
+            <td>
+              <label>seleccionar todos</label>
+              <input type="checkbox" id="select_all_cli"/>
+              <?php
+                echo $this->Form->input('lclis', array(
+                    'multiple' => 'multiple',
+                    'type' => 'select',
+                    'label' => 'Clientes',                    
+                ));?>
+            </td>
+        	<td>                      
+            <?php
+            echo $this->Form->input('periodomes', array(
+                    'options' => array(
+                        '01'=>'Enero', 
+                        '02'=>'Febrero', 
+                        '03'=>'Marzo', 
+                        '04'=>'Abril', 
+                        '05'=>'Mayo', 
+                        '06'=>'Junio', 
+                        '07'=>'Julio', 
+                        '08'=>'Agosto', 
+                        '09'=>'Septiembre', 
+                        '10'=>'Octubre', 
+                        '11'=>'Noviembre', 
+                        '12'=>'Diciembre', 
+                        ),
+                    'empty' => 'Elegir mes',
+                    'label'=> 'Mes',
+                    'required' => true, 
+                    'placeholder' => 'Por favor seleccione Mes'
+                ));
+  	        ?>
+             <?php echo $this->Form->input('periodoanio', array(
+                                                    'options' => array(
+                                                        '2014'=>'2014', 
+                                                        '2015'=>'2015',     
+                                                        ),
+                                                    'empty' => 'Elegir año',
+                                                    'label'=> 'Año',
+                                                    'required' => true, 
+                                                    'placeholder' => 'Por favor seleccione año'
+                                                    )
+                                        );?>
+          </td>
+              <?php echo $this->Form->input('selectby',array('default'=>'none','type'=>'hidden'));//?>
+
+                <td rowspan="2"><?php echo $this->Form->end(__('Aceptar')); ?></td>
+         </tr>
+         </table>
+</div> <!--End Clietenes_avance-->
+
+<div class="clientes_avance">
+<?php if(isset($mostrarInforme)){?>
+	
+	<?php $periodoSel=$periodomes."-".$periodoanio;?>
+	<h3><?php echo 'Periodo Seleccionado: '.$periodoSel; ?></h3>
+
+
+	<table cellpadding="0" cellspacing="0" class="tbl_tareas"> <!--Tbl 1-->
+	<tr>
+    <th valign="top"><label style="width:100px"><?php echo 'Grupo Cliente'; ?></label></th>
+		<th valign="top"><label style="width:100px"><?php echo 'Nombre'?></label></th>    
+		<th valign="top"><label style="width:100px"><?php echo 'Impuestos' ?></label></th>
+			<?php foreach ($tareas as $tarea): ?>
+		<th valign="top" class="<?php echo 'tarea'.$tarea["Tareasxclientesxestudios"]["tareascliente_id"]; ?>">
+          <lable style="width:70px">
+					<?php echo h($tarea["Tareasxclientesxestudios"]['descripcion']); ?>
+          </label>
+		</th>	
+		<?php endforeach; ?>
+	</tr>
+	<?php 
+  //Recorremos los clientes
+  foreach ($clientes as $cliente): ?>
+	<tr>
+    <td><?php echo $this->Html->link($cliente['Grupocliente']['nombre'], array('controller' => 'grupoclientes', 'action' => 'view', $cliente['Grupocliente']['id'])); ?></td>
+		<td><label style="height:50px;"><?php echo __(h($cliente['Cliente']['nombre'])); ?></label></td>
+		<td>
+			<table class="tbl_imp" cellpadding="0" cellspacing="0"> <!--Tbl 1.1-->
+				<?php 
+        //Reconrremos los impuestos de Cada Cliente
+        foreach ($cliente["Impcli"] as $impcli): ?>
+				<tr>
+					<td ><?php echo h($impcli['Impuesto']['nombre']);?></td>
+				</tr>
+				<?php endforeach; ?>	
+        <?php if(count($cliente["Impcli"])==0){?>
+        <tr>
+          <td >
+                <?php
+                echo $this->Html->link("Relacionar Impuestos",
+                                array(
+                                  'controller' => 'clientes', 
+                                  'action' => 'view', 
+                                  $cliente["Cliente"]["id"]
+                                  )
+                          );  
+              ?>  
+         </td>
+        </tr>
+       <?php }?>
+			</table>
+		</td>	
+		<?php 
+    //Recorremos las tareas una ves por cada impuesto de cliente chekiando que la tarea este habilitada para el usuario logueado
+    foreach ($tareas as $tarea): 
+				$eventVacio=0;
+				$tareaFild='tarea'.$tarea["Tareasxclientesxestudios"]["tareascliente_id"];
+      $Tareahabilitado=false;  
+    if($tarea["Tareasxclientesxestudios"]['user_id']==$this->Session->read('Auth.User.id')){ 
+      $Tareahabilitado=true;
+    }   
+  		if($tarea["Tareasxclientesxestudios"]['tipo']=="cliente"){
+  				//tarea tipo cliente?>
+  				<?php
+  				$band=true; 
+  				foreach ($cliente["Eventoscliente"] as $evento): 
+  				if($evento['periodo']==$periodoSel){
+    				//Recorremos el evento de este periodo (supuestamente vendra uno solo por cada impuesto del cliente)
+
+            //Si el evento en esta tarea esta ""PENDIENTE""
+      				if($evento[$tareaFild]=='pendiente'){?>
+      				<?php $params= $evento['id'].",'".$tareaFild."','".$periodoSel."','".$cliente['Cliente']['id']."'";?>             
+          		<td class="pendiente  <?php echo $tareaFild;?>" id="cell<?php echo $cliente['Cliente']['id'].'-'.$tareaFild;?>">  
+                <?php if($Tareahabilitado) {
+                  $confImg=array('width' => '20', 'height' => '20','onClick'=>"realizarEventoCliente(".$params.")");
+                } else{
+                  $confImg=array('width' => '20', 'height' => '20','onClick'=>"noHabilitado()");
+                } ?>         
+          		  <?php echo $this->Html->image('add.png',$confImg)?>
+
+              </td>
+        		<?php }            
+             //Si el evento en esta tarea esta ""REALIZADO""
+            if($evento[$tareaFild]=='realizado'){?>
+                  <?php $paramsVer= $evento['id'].",'".$tareaFild."'";?> 	      				
+                  <td class="realizado  <?php echo $tareaFild;?>" id="cell<?php echo $cliente['Cliente']['id'].'-'.$tareaFild;?>">
+
+                  <?php echo $this->Html->image('view.png',array('width' => '20', 'height' => '20','onClick'=>"verEventoCliente(".$paramsVer.")"))?> </td>
+          		<?php }
+              $band=false;
+            }
+          ?>
+      		<?php endforeach;
+      		if($band){	
+              //SI el evento no esta creado procedemos por aca ""NO CREADO""
+              ?> 	      				
+             	<td id="cell<?php echo $cliente['Cliente']['id'].'-'.$tareaFild;?>" class="pendiente  <?php echo $tareaFild;?>">
+      		    <?php 
+      		    	$params= "0,'".$tareaFild."','".$periodoSel."','".$cliente['Cliente']['id']."'";
+      			    $eventVacio++;?>
+                <?php if($Tareahabilitado) {
+                  $confImg=array('width' => '20', 'height' => '20','onClick'=>"realizarEventoCliente(".$params.")");
+                } else{
+                  $confImg=array('width' => '20', 'height' => '20','onClick'=>"noHabilitado()");
+                } ?>         
+                <?php echo $this->Html->image('add.png',$confImg)?>
+      		    </td>
+      		<?php } ?>
+  		<?php }
+
+		if($tarea["Tareasxclientesxestudios"]['tipo']=="impuesto"){
+        //tarea tipo impuesto?>
+		<td class="impuesto"> <!--Tbl 1.2-->
+      <table class="tbl_tareaimp" cellpadding="0" cellspacing="0">
+        <?php 
+        $hayImpuestoRelacioado=false;
+        foreach ($cliente["Impcli"] as $impcli): 
+            //Recorremos los impuestos de cada cliente
+            $hayImpuestoRelacioado=true;
+
+            $eventoNoCreado=true; 
+            $eventoCliente=array();
+            //Recorremos los impuestos de cada cliente
+            //Chekiamos si el evento esta creado
+            foreach ($impcli["Eventosimpuesto"] as $evento): 
+                if($evento['periodo']==$periodoSel){
+                    $eventoCliente=$evento;
+                    $eventoNoCreado=false;
+                }
+
+                ?>
+        <?php endforeach;
+        $tareaFild='tarea'.$tarea["Tareasxclientesxestudios"]["tareascliente_id"];?>
+        <tr>
+  	  	<?php if($eventoNoCreado){	
+            //Si el evento no esta creado ""NO CREADO""
+            ?> 	
+          	<td class="pendiente " id="cellimp<?php echo $cliente['Cliente']['id'].'-'.$tareaFild.'-'.$impcli['id'];?>"> 
+            	<?php $params= "0,'".$tareaFild."','".$periodoSel."','".$cliente['Cliente']['id']."','".$impcli['id']."'";?>	    
+              <?php if($Tareahabilitado) {
+                  //Aqui controlo si el evento esta que siendo realizado es uno que debe mostrar un popin 
+                  if($tareaFild=="tarea5"){
+                  //Tarea5 es "Prepar Papeles de Trabajo" debe mostrar popin para inicializar variables del pagoa realiar del impuesto
+                    echo $this->Html->image('add.png',array('width' => '20', 'height' => '20','onClick'=>"showPrepararPapeles(".$params.")"));
+                  }elseif ($tareaFild=="tarea13") {
+                  //Tarea13 es "A Pagar" debe mostrar popin para cargar variables del pago realizado del impuesto
+                    echo $this->Html->image('add.png',array('width' => '20', 'height' => '20','onClick'=>"showPagar(".$params.")"));
+
+                  }else{
+                    echo $this->Html->image('add.png',array('width' => '20', 'height' => '20','onClick'=>"realizarEventoImpuesto(".$params.")"));
+                  }
+                 
+                } else{
+                   echo $this->Html->image('add.png',array('width' => '20', 'height' => '20','onClick'=>"noHabilitado()"));
+                } ?>            
+                 
+                  
+            </td>
+      	<?php	}
+  	  	else{
+          	if($evento[$tareaFild]=='pendiente'){
+                //Si el evento esta ""PENDIENTE""?>          
+              	<td class="pendiente  <?php echo $tareaFild;?>" id="cellimp<?php echo $cliente['Cliente']['id'].'-'.$tareaFild.'-'.$impcli['id'];?>" >
+                  <?php $params= $evento['id'].",'".$tareaFild."','".$periodoSel."','".$cliente['Cliente']['id']."','".$impcli['id']."'";?>
+                 
+                  <?php if($Tareahabilitado) {
+                 
+                      //Aqui controlo si el evento esta que siendo realizado es uno que debe mostrar un popin 
+                      if($tareaFild=="tarea5"){
+                      //Tarea5 es "Prepar Papeles de Trabajo" debe mostrar popin para inicializar variables del pagoa realiar del impuesto
+                        echo $this->Html->image('add.png',array('width' => '20', 'height' => '20','onClick'=>"showPrepararPapeles(".$params.")"));
+                      }elseif ($tareaFild=="tarea13") {
+                      //Tarea13 es "A Pagar" debe mostrar popin para cargar variables del pago realizado del impuesto
+                        echo $this->Html->image('add.png',array('width' => '20', 'height' => '20','onClick'=>"showPagar(".$params.")"));
+
+                      }else{
+                        echo $this->Html->image('add.png',array('width' => '20', 'height' => '20','onClick'=>"realizarEventoImpuesto(".$params.")"));
+                      }
+
+                 
+                  } else{
+                     echo $this->Html->image('add.png',array('width' => '20', 'height' => '20','onClick'=>"noHabilitado()"));
+                  } ?>                            
+                </td>
+      	  	<?php }
+                    	
+    		    if($evento['tarea'.$tarea["Tareasxclientesxestudios"]["tareascliente_id"]]=='realizado'){
+              //Si el evento esta ""Realizado""
+              $paramsVer= $evento['id'].",'".$tareaFild."','".$impcli['id']."'";?>            
+          	   <td class="realizado "> 
+                  <?php ?>
+
+                   <?php $params= $evento['id'].",'".$tareaFild."','".$periodoSel."','".$cliente['Cliente']['id']."','".$impcli['id']."','".$evento['fchvto']."','".$evento['montovto']."','".$evento['monc']."','".$evento['descripcion']."'";?>
+                   <?php $paramsModPagar= $evento['id'].",'".$tareaFild."','".$periodoSel."','".$cliente['Cliente']['id']."','".$impcli['id']."','".$evento['montorealizado']."','".$evento['fchrealizado']."'";?>   
+                  <?php if($Tareahabilitado) {
+                 
+                      //Aqui controlo si el evento esta que siendo realizado es uno que debe mostrar un popin 
+                      if($tareaFild=="tarea5"){
+                      //Tarea5 es "Prepar Papeles de Trabajo" debe mostrar popin para inicializar variables del pagoa realiar del impuesto
+                        echo $this->Html->image('edit.png',array('width' => '20', 'height' => '20','onClick'=>"modificarPrepararPapeles(".$params.")"));
+                      }elseif ($tareaFild=="tarea13") {
+                      //Tarea13 es "A Pagar" debe mostrar popin para cargar variables del pago realizado del impuesto
+                        echo $this->Html->image('edit.png',array('width' => '20', 'height' => '20','onClick'=>"modificarPagar(".$paramsModPagar.")"));
+
+                      }else{
+                        echo $this->Html->image('edit.png',array('width' => '20', 'height' => '20','onClick'=>"modificarEventoImpuesto(".$params.")"));
+                      }
+
+                 
+                  } else{
+                     echo $this->Html->image('add.png',array('width' => '20', 'height' => '20','onClick'=>"noHabilitado()"));
+                  } ?>  
+                </td> 
+                <?php 	} 
+            } ?></td>
+            </tr>
+        			<?php endforeach; 
+        			if(!$hayImpuestoRelacioado){  ?> 	
+                <tr>
+                		<td class="pendiente"></td>
+                </tr>
+					<?php	}?>
+  				</table>	
+        </td>				
+        <?php }?>	
+        <?php endforeach; ?>
+     </tr>
+  	 <?php endforeach; ?>
+ 	 </table>
+	 <?php } ?>
+</div>
+<div id="popInCrearEventCli">
+
+</div>
+<!-- Inicio Popin Preparar papeles de Trabajo -->
+<a href="#x" class="overlay" id="PIPrepararPapeles"></a>
+<div class="popup">
+  <div class='section body'>
+      <div id="form_prepararPapeles" class="prepararPapeles form">
+      <fieldset>
+        <legend><?php echo __('Preparar Papeles de Trabajo'); ?></legend>
+        <?php         
+       
+          echo $this->Form->input('eventId',array('default'=>"",'type'=>'hidden'));
+          echo $this->Form->input('tarea',array('default'=>"",'type'=>'hidden'));
+          echo $this->Form->input('clienteid',array('default'=>"",'type'=>'hidden'));
+          echo $this->Form->input('periodo',array('default'=>"",'type'=>'hidden'));
+          echo $this->Form->input('impcliid',array('default'=>"",'type'=>'hidden'));
+          //,'type'=>'hidden'
+           echo $this->Form->input('fchvto', array(
+                      'class'=>'datepicker', 
+                      'type'=>'text',
+                      'label'=>'Fecha de Vencimiento',
+                      'readonly','readonly')
+           );
+
+          echo $this->Form->input('montovto',array('label'=>'Monto a Pagar','default'=>"0"));
+          echo $this->Form->input('monc',array('label'=>'Monto a Favor','default'=>"0"));
+          echo $this->Form->input('descripcion',array('default'=>"-"));        
+        ?>
+      </fieldset>
+      <a href="#"  onclick="enviarPrepararPapeles()" class="btn_aceptar">  Agregar </a>
+    </div>
+  </div>
+  <a class="close" href="#close"></a>
+</div>
+<!-- Fin Popin Preparar papeles de Trabajo  --> 
+<!-- Inicio Popin Pagar -->
+<a href="#x" class="overlay" id="PIPagar"></a>
+<div class="popup">
+  <div class='section body'>
+      <div id="form_pagar" class="pagar form">
+      <fieldset>
+        <legend><?php echo __('PAGAR'); ?></legend>
+        <?php         
+       
+          echo $this->Form->input('eventId',array('default'=>"",'type'=>'hidden'));
+          echo $this->Form->input('tarea',array('default'=>"",'type'=>'hidden'));
+          echo $this->Form->input('clienteid',array('default'=>"",'type'=>'hidden'));
+          echo $this->Form->input('periodo',array('default'=>"",'type'=>'hidden'));
+          echo $this->Form->input('impcliid',array('default'=>"",'type'=>'hidden'));
+          //,'type'=>'hidden'
+          echo $this->Form->input('montorealizado',array('label'=>'Monto Pagado','default'=>"0"));
+          echo $this->Form->input('fchrealizado', array(
+                      'class'=>'datepicker', 
+                      'type'=>'text',
+                      'label'=>'Realizado el dia',
+                      'readonly','readonly')
+           );      
+        ?>
+      </fieldset>
+      <a href="#"  onclick="enviarPagar()" class="btn_aceptar">  Agregar </a>
+    </div>
+  </div>
+  <a class="close" href="#close"></a>
+</div>
+<!-- Fin Popin Pagar--> 
+<!-- Inicio Popin VerEventoImpuesto -->
+<a href="#x" class="overlay" id="popInVerEventImp"></a>
+<div  class="popup">
+  <div class='section body' id="divpopInVerEventImp">
+      <div id="form_pagar" class="pagar form">
+      
+      </div>
+  </div>
+  <a class="close" href="#close"></a>
+</div>
+<!-- Fin Popin EventoImpuesto--> 
+
+

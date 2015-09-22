@@ -1,0 +1,1226 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Prov",
+				"Proveedore"
+			],
+			[
+				"partido",
+				"partido_id"
+			],
+			[
+				"op",
+				"optionsLoc"
+			],
+			[
+				"pro",
+				"proveedore"
+			],
+			[
+				"find",
+				"findAll"
+			],
+			[
+				"numero",
+				"numerocomprobante"
+			],
+			[
+				"val",
+				"value"
+			],
+			[
+				"form",
+				"formUrl"
+			],
+			[
+				"h",
+				"h2	Tag"
+			],
+			[
+				"mano",
+				"Manodeobra"
+			],
+			[
+				"orr",
+				"ordentrabajo"
+			],
+			[
+				"stoc",
+				"Stock"
+			],
+			[
+				"th",
+				"th	Tag"
+			],
+			[
+				"floa",
+				"float"
+			],
+			[
+				"isn",
+				"is_null"
+			],
+			[
+				"Coun",
+				"count"
+			],
+			[
+				"color",
+				"colorVerde"
+			],
+			[
+				"asc",
+				"ASC"
+			],
+			[
+				"ingreso",
+				"ingresosActuales"
+			],
+			[
+				"egres",
+				"egresosActuales"
+			],
+			[
+				"ingresos",
+				"ingresosActuales"
+			],
+			[
+				"Re",
+				"Registro"
+			],
+			[
+				"honora",
+				"honorariosTotal"
+			],
+			[
+				"monto",
+				"montorealizado"
+			],
+			[
+				"periodo",
+				"periodo"
+			],
+			[
+				"cliente",
+				"clienteses"
+			],
+			[
+				"fc",
+				"fchrealizado"
+			],
+			[
+				"mon",
+				"montorealizado"
+			],
+			[
+				"eve",
+				"eventosimpuestos"
+			],
+			[
+				"for",
+				"foreach	foreach …"
+			],
+			[
+				"Clie",
+				"Cliente"
+			],
+			[
+				"Imp",
+				"Impcli"
+			],
+			[
+				"vi",
+				"view"
+			],
+			[
+				"imp",
+				"impuesto_id"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"edi",
+				"editajax"
+			],
+			[
+				"fchc",
+				"fchcumpleanosconstitucion"
+			],
+			[
+				"tipo",
+				"tipopersonajuridica"
+			],
+			[
+				"tipoperson",
+				"tipopersona"
+			],
+			[
+				"SE",
+				"SELECT"
+			],
+			[
+				"condi",
+				"conditionsGcli"
+			],
+			[
+				"estudio",
+				"estudio_id"
+			],
+			[
+				"che",
+				"checkbox"
+			],
+			[
+				"ba",
+				"background"
+			],
+			[
+				"nombre",
+				"nombrefantasia"
+			],
+			[
+				"period",
+				"periodoanio"
+			],
+			[
+				"num",
+				"numbers"
+			],
+			[
+				"acti",
+				"action"
+			],
+			[
+				"re",
+				"return"
+			],
+			[
+				"even",
+				"eventVacio"
+			],
+			[
+				"per",
+				"periodo"
+			],
+			[
+				"cre",
+				"create"
+			],
+			[
+				"save",
+				"saveField"
+			],
+			[
+				"cl",
+				"class"
+			],
+			[
+				"rea",
+				"realizar"
+			],
+			[
+				"realizar",
+				"realizarEventoCliente"
+			],
+			[
+				"prin",
+				"print_r"
+			],
+			[
+				"fad",
+				"fadeIn"
+			],
+			[
+				"Cl",
+				"Cliente"
+			],
+			[
+				"peri",
+				"periodomes"
+			],
+			[
+				"Cliente",
+				"Cliente"
+			],
+			[
+				"evento",
+				"eventosclientes"
+			],
+			[
+				"impuesto",
+				"impuesto_id"
+			],
+			[
+				"Im",
+				"Impclis"
+			],
+			[
+				"sc",
+				"SCRIPT	Tag"
+			],
+			[
+				"mysql_e",
+				"mysql_error"
+			],
+			[
+				"ca",
+				"cabeceras"
+			],
+			[
+				"error",
+				"error2"
+			],
+			[
+				"Ca",
+				"cabeceras"
+			],
+			[
+				"inp",
+				"inpHasta"
+			],
+			[
+				"exp",
+				"explode"
+			],
+			[
+				"onc",
+				"onClick"
+			],
+			[
+				"v",
+				"val"
+			],
+			[
+				"size",
+				"getSize"
+			],
+			[
+				"tare",
+				"tareaid"
+			],
+			[
+				"car",
+				"cargarLastDig"
+			],
+			[
+				"res",
+				"resImp"
+			],
+			[
+				"im",
+				"impcliId"
+			],
+			[
+				"ddl_",
+				"ddl_ano"
+			],
+			[
+				"con",
+				"condition"
+			],
+			[
+				"org",
+				"organismo"
+			],
+			[
+				"tarea",
+				"tarea_nom"
+			],
+			[
+				"tareaimp",
+				"tareaimp_id"
+			],
+			[
+				"str_re",
+				"str_replace"
+			],
+			[
+				"els",
+				"else"
+			],
+			[
+				"sop",
+				"sOperarioFin"
+			],
+			[
+				"sO",
+				"sOperarioIni"
+			],
+			[
+				"G",
+				"GET"
+			],
+			[
+				"impc",
+				"impcli"
+			],
+			[
+				"ut",
+				"utf8_decode"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"cols",
+				"colspan"
+			],
+			[
+				"col",
+				"colspan"
+			],
+			[
+				"Per",
+				"PerInfsql"
+			],
+			[
+				"PerIn",
+				"PerInfTable"
+			],
+			[
+				"Cli",
+				"CliId"
+			],
+			[
+				"totAPagarLPago",
+				"totAPagarLPago18"
+			],
+			[
+				"pue",
+				"puedePagar"
+			],
+			[
+				"honorario",
+				"honorario_fecha"
+			],
+			[
+				"var",
+				"variante"
+			],
+			[
+				"vae",
+				"variante"
+			],
+			[
+				"deuda",
+				"deudaAnterior"
+			],
+			[
+				"totPagadoLPago",
+				"totPagadoLPago2"
+			],
+			[
+				"tota",
+				"totAPagarLPago2"
+			],
+			[
+				"totpa",
+				"totPagadoLPago2"
+			],
+			[
+				"honorario_",
+				"honorario_monto"
+			],
+			[
+				"t",
+				"table	Tag"
+			],
+			[
+				"tot",
+				"totpag"
+			],
+			[
+				"totp",
+				"totpag"
+			],
+			[
+				"hono",
+				"honoact"
+			],
+			[
+				"lin",
+				"linLPago"
+			],
+			[
+				"deud",
+				"deudaAnterior"
+			],
+			[
+				"lugar",
+				"lugarpago_nombre"
+			],
+			[
+				"ne",
+				"new_array"
+			],
+			[
+				"ce",
+				"cementerios"
+			],
+			[
+				"def",
+				"default"
+			],
+			[
+				"numbe",
+				"number_format"
+			],
+			[
+				"bacr",
+				"background-color"
+			],
+			[
+				"Turno",
+				"Turnos"
+			],
+			[
+				"usua",
+				"usuarios"
+			],
+			[
+				"top",
+				"margin-top"
+			],
+			[
+				"mar",
+				"margin-left"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"si",
+				"solid"
+			],
+			[
+				"b",
+				"inline-block"
+			],
+			[
+				"d",
+				"display"
+			],
+			[
+				"bot",
+				"margin-bottom"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/C/wamp/www/sigesazul/app/Controller/VentasController.php",
+			"settings":
+			{
+				"buffer_size": 6197,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/wamp/www/sigesazul/app/View/Ventas/add.ctp",
+			"settings":
+			{
+				"buffer_size": 4252,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/wamp/www/sigesazul/app/webroot/js/ventas/add.js",
+			"settings":
+			{
+				"buffer_size": 7843,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/wamp/www/sigesazul/app/Controller/OrdentrabajosController.php",
+			"settings":
+			{
+				"buffer_size": 7565,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/wamp/www/sigesazul/app/Model/AppModel.php",
+			"settings":
+			{
+				"buffer_size": 1059,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/wamp/www/sigesazul/app/View/Ventas/edit.ctp",
+			"settings":
+			{
+				"buffer_size": 3356,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/wamp/www/sigesazul/app/Controller/MarcasController.php",
+			"settings":
+			{
+				"buffer_size": 2885,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/wamp/www/sigesazul/app/Controller/ModelosController.php",
+			"settings":
+			{
+				"buffer_size": 3934,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 127.0,
+		"selected_items":
+		[
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 416.0
+	},
+	"console":
+	{
+		"height": 160.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/database.php",
+		"/C/wamp/www/sigesazul/app/webroot/js/productos/productos.js",
+		"/C/wamp/www/sigesazul/app/webroot/js/proveedores/index.js",
+		"/C/wamp/www/sigesazul/app/webroot/js/ordentrabajos/add.js",
+		"/C/wamp/www/sigesazul/app/Controller/ProductosController.php",
+		"/C/wamp/www/sigesazul/app/View/Layouts/default.ctp",
+		"/C/wamp/www/sigesazul/app/Controller/ModelosController.php",
+		"/C/wamp/www/sigesazul/app/Config/bootstrap.php",
+		"/C/wamp/www/sigesazul/app/Controller/AppController.php",
+		"/C/wamp/www/sigesazul/app/Controller/VentasController.php",
+		"/C/wamp/www/sigesazul/app/View/Ventas/add.ctp",
+		"/C/wamp/www/sigesazul/app/Controller/LocalidadesController.php",
+		"/C/wamp/www/sigesazul/app/Config/database.php",
+		"/C/wamp/www/sigesazul/app/Controller/ProveedoresController.php",
+		"/C/wamp/www/sigesazul/app/View/Proveedores/edit.ctp",
+		"/C/Users/Augusto/Dropbox/Synfotech/_Sistema de Gestion de Serv Tecnico y Repuestera/Aplicacion web/sigesazul/app/webroot/js/proveedores/index.js",
+		"/C/wamp/www/sigesazul/app/View/Proveedores/index.ctp",
+		"/C/wamp/www/sigesazul/app/View/Layouts/ajax.ctp",
+		"/C/wamp/www/sigesazul/app/Model/Localidade.php",
+		"/C/wamp/www/sigesazul/app/View/Proveedores/add.ctp",
+		"/C/wamp/www/sigesazul/app/Model/Proveedore.php",
+		"/C/wamp/www/sigesazul/app/Config/routes.php",
+		"/C/wamp/www/sigesazul/app/Controller/UsersController.php",
+		"/C/wamp/www/sigesazul/app/View/Manodeobras/index.ctp",
+		"/C/wamp/www/sigesazul/app/Controller/ManodeobrasController.php",
+		"/C/wamp/www/sigesazul/app/View/Ventas/edit.ctp",
+		"/C/wamp/www/sigesazul/app/View/Productos/index.ctp",
+		"/C/wamp/www/sigesazul/app/Controller/OrdentrabajosController.php",
+		"/C/wamp/www/sigesazul/app/View/Users/login.ctp",
+		"/C/wamp/www/sigesazul/app/View/Ordentrabajos/index.ctp",
+		"/C/wamp/www/sigesazul/app/tmp/logs/error.log",
+		"/C/wamp/www/sigesazul/app/View/Ordentrabajos/edit.ctp",
+		"/C/wamp/www/sigesazul/app/View/Manodeobras/getdetalle.ctp",
+		"/C/wamp/www/sigesazul/app/Controller/ManoobraxordentrabajosController.php",
+		"/C/wamp/www/sigesazul/app/View/Ordentrabajos/add.ctp",
+		"/C/wamp/www/sigesazul/app/Controller/OrdendetrabajosController.php",
+		"/C/wamp/www/sigesazul/app/View/Manoobraxordentrabajos/getdetalle.ctp",
+		"/C/wamp/www/sigesazul/app/Model/Ordendetrabajo.php",
+		"/C/wamp/www/sigesazul/app/Model/Detalleordentrabajo.php",
+		"/C/wamp/www/sigesec/app/webroot/js/clientes/view.js",
+		"/C/wamp/www/sigesazul/app/webroot/js/ventas/add.js",
+		"/C/wamp/www/sigesazul/app/Model/Ordentrabajo.php",
+		"/C/wamp/www/sigesazul/app/View/Productos/getdetalle.ctp",
+		"/C/wamp/www/sigesazul/app/Model/Manodeobra.php",
+		"/C/wamp/www/sigesec/app/View/Clientes/view.ctp",
+		"/C/wamp/www/sigesazul/app/View/Productos/detDetalle.ctp",
+		"/C/wamp/www/sigesazul/app/View/Productos/getbymodel.ctp",
+		"/C/wamp/www/sigesazul/app/Model/Venta.php",
+		"/C/wamp/www/sigesec/app/View/Grupoclientes/view.ctp",
+		"/C/wamp/www/sigesec/app/View/Users/login.ctp",
+		"/C/wamp/www/sigesec/app/Controller/ClientesController.php",
+		"/C/wamp/www/sigesec/app/View/Eventosimpuestos/ver.ctp",
+		"/C/wamp/www/sigesec/app/View/Eventosclientes/ver.ctp",
+		"/C/wamp/www/sigesec/app/Controller/EventosclientesController.php",
+		"/C/wamp/www/sigesec/app/Controller/EventosimpuestosController.php",
+		"/C/wamp/www/sigesec/app/webroot/js/clientes/avance.js",
+		"/C/wamp/www/sigesec/app/View/Clientes/avance.ctp",
+		"/C/wamp/www/sigesec/app/View/Clientes/avancebackup",
+		"/C/wamp/www/sigesec/app/View/Layouts/default.ctp",
+		"/C/wamp/www/sigesec/app/Controller/PersonasrelacionadasController.php",
+		"/C/wamp/www/sigesec/app/View/Personasrelacionadas/edit.ctp",
+		"/C/wamp/www/sigesec/app/Controller/DepositosController.php",
+		"/C/wamp/www/sigesec/app/View/Depositos/edit.ctp",
+		"/C/wamp/www/sigesec/app/webroot/js/clientes/add.js",
+		"/C/wamp/www/sigesec/app/Controller/IngresosController.php",
+		"/C/wamp/www/sigesec/app/Controller/HonorariosController.php",
+		"/C/wamp/www/sigesec/app/View/Clientes/add.ctp",
+		"/C/wamp/www/sigesec/app/Controller/GrupoclientesController.php",
+		"/C/wamp/www/sigesec/app/webroot/js/personarelacionada/edit.js",
+		"/C/wamp/www/sigesec/app/Controller/TareasxclientesxestudiosController.php",
+		"/C/wamp/www/sigesec/app/Controller/OrganismosxclientesController.php",
+		"/C/wamp/www/estudiomanjon/informes/tablaSI2.php",
+		"/C/Users/Augusto/Dropbox/Web/SIGESEC/Migracion/Script Insertar Eventos.sql",
+		"/C/Users/Augusto/Dropbox/Web/SIGESEC/Migracion/Script Insertar Impclis.sql",
+		"/C/Users/Augusto/Dropbox/Web/SIGESEC/Migracion/Script Insertar Impuestos.sql",
+		"/C/Users/Augusto/Dropbox/Web/SIGESEC/Migracion/Script Insertar Clientes.sql",
+		"/C/Users/Augusto/Dropbox/Web/SIGESEC/Migracion/Script Insertar Grupo de Clientes",
+		"/C/Users/Augusto/Dropbox/Web/SIGESEC/Migracion/query completa",
+		"/C/wamp/www/sigesec/app/Controller/TareasimpuestosController.php",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/view.ctp",
+		"/C/wamp/www/sigesec/app/View/Clientes/informefinancierotributario.ctp",
+		"/C/wamp/www/sigesec/app/View/Clientes/informepagosdelmes.ctp",
+		"/C/Users/Augusto/Dropbox/Synfotech/_Sistema de Gestion de Estudio Contable/Aplicacion Web/estudiomanjon/informes/tablapagos2.php",
+		"/C/Users/Augusto/Dropbox/Synfotech/_Sistema de Gestion de Estudio Contable/Aplicacion Web/estudiomanjon/informes/pagosdelmes.php",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/login.ctp",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/UsersController.php",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/routes.php",
+		"/C/wamp/www/sigesec/app/Config/routes.php",
+		"/C/wamp/www/sigesec/app/Config/email.php.default",
+		"/C/wamp/www/sigesec/app/View/Honorarios/edit.ctp",
+		"/C/wamp/www/sigesec/app/View/Ingresos/edit.ctp",
+		"/C/wamp/www/sigesec/app/Model/Cliente.php",
+		"/C/wamp/www/sigesec/app/View/Ingresos/view.ctp",
+		"/C/wamp/www/sigesec/app/View/Ingresos/addajax.ctp",
+		"/C/wamp/www/sigesec/app/View/Ingresos/add.ctp",
+		"/C/wamp/www/sigesec/app/View/Ingresos/index.ctp",
+		"/C/wamp/www/sigesec/app/Model/Deposito.php",
+		"/C/wamp/www/sigesec/app/Model/Ingreso.php",
+		"/C/wamp/www/sigesec/app/View/Users/index.ctp",
+		"/C/wamp/www/sigesec/app/webroot/js/Users/index.js",
+		"/C/wamp/www/sigesec/app/webroot/js/menu.js",
+		"/C/wamp/www/sigesec/app/webroot/js/Grupoclientes/index.js",
+		"/C/wamp/www/sigesec/app/webroot/js/clientes/indexmt.js",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/default.ctp",
+		"/C/wamp/www/sigesec/app/Controller/BancosysindicatosController.php",
+		"/C/wamp/www/sigesec/app/Controller/ArchivosController.php",
+		"/C/wamp/www/sigesec/app/Controller/CbusesController.php",
+		"/C/wamp/www/sigesec/app/Controller/ContactosController.php",
+		"/C/wamp/www/sigesec/app/Controller/DomiciliosController.php",
+		"/C/wamp/www/sigesec/app/Controller/EstudiosController.php",
+		"/C/wamp/www/sigesec/app/Controller/EventosController.php",
+		"/C/wamp/www/sigesec/app/Controller/ImpclisController.php",
+		"/C/wamp/www/sigesec/app/Controller/ImpuestosController.php",
+		"/C/wamp/www/sigesec/app/Controller/LugarpagosController.php",
+		"/C/wamp/www/sigesec/app/Controller/TareasclientesController.php",
+		"/C/wamp/www/sigesec/app/Controller/TareasximpxestudiosController.php",
+		"/C/wamp/www/sigesec/app/Controller/UsersController.php",
+		"/C/wamp/www/sigesec/app/Controller/VencimientosController.php",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/ClientesController.php",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/avance.ctp",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/index.ctp",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/index 2.ctp",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/jquery.dataTables.js",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/bootstrap 2.php",
+		"/C/wamp/www/sigesec/app/Config/core.php",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/core.php",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/index.php",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-1/AppController 2.php"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"C:\\wamp\\www\\sigesazul\\app",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"debug",
+			" \n",
+			"securitysalt",
+			"debugkit",
+			"actualizarTotal",
+			"checkstock",
+			"OrdentrabajoCosto",
+			"checkstock",
+			"&",
+			"VentaNumDetalle",
+			"date",
+			"verEvento",
+			"verEventoCliente",
+			"hayImpuestoRelacioado",
+			"aja",
+			"addajax",
+			"deposito",
+			"depo",
+			"recibos",
+			"facturacion",
+			"relacionada",
+			"personas re",
+			"$this->request->data['Cliente']",
+			"$this->request->data['Cliente']['fchcorteejerciciofiscal']",
+			"$this->request->data",
+			"facturacion",
+			"add",
+			"add(",
+			"agregar",
+			"evento_periodo",
+			"load",
+			"view",
+			"totLPago",
+			"pagadoActual",
+			"auxRecibosActuales",
+			"pagadoActual",
+			"deudaAnterior",
+			"$sc",
+			"totSaldo",
+			"row",
+			"totLPago",
+			"honorar",
+			"honorario",
+			"fchvyo",
+			"validarCampos",
+			"totalPlanificado",
+			"deudasActuales",
+			"honorariosTotal",
+			"honorariosActuales",
+			"ingresosTotal",
+			"ingt",
+			"tipo'",
+			"tipo')",
+			"tipo",
+			"date",
+			"Elegir Año",
+			"elegir mes",
+			"form_modificar_r",
+			"sigesec",
+			"put",
+			",put",
+			"array",
+			"put",
+			"\"/sigesec",
+			"sigesec",
+			"img",
+			"men",
+			"meno",
+			"menos",
+			"menos2",
+			"img",
+			"meno",
+			"menos",
+			"menos2",
+			"$it",
+			"it",
+			"row",
+			"total",
+			"band",
+			"ava",
+			"date",
+			"showPrepararPapeles",
+			"verEventoImpuesto",
+			"realizado",
+			"realizarEventoImpuesto",
+			"realizarEventoCliente",
+			"enviarPrepararPapeles",
+			"crearevencli",
+			"realizarEventoCliente",
+			"this",
+			".tbl_tareas tr td",
+			"del",
+			"dele",
+			"x",
+			"class=\"ac",
+			"modificar_impcli",
+			"loadForm",
+			"loadFormImpuesto",
+			"loadfo",
+			"modificar_impcli",
+			"elimi",
+			"nu",
+			"nue",
+			"nuev",
+			"nuevo",
+			"nuevo_",
+			"nuevo_i",
+			"nuevo_impcli",
+			"form_impcli",
+			"editarperso",
+			"agregar",
+			"agregarP",
+			"agregarPe",
+			"agregarPer",
+			"agregarPersona",
+			"loadFormDomicilio",
+			"persona",
+			"add",
+			"p",
+			"pe",
+			"per",
+			"pers",
+			"person",
+			"persona",
+			"load",
+			"form_domicilio",
+			"Domicilio",
+			"locatio"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"&                                                                  ",
+			"&",
+			"&                    ",
+			"serverLayoutURL+\"",
+			"td",
+			"Acciones",
+			"acciones",
+			"style='border:1px solid #333;text-align:left;text-align:left'",
+			"style='width:60%'",
+			"style",
+			"style='width:100%'",
+			"style='",
+			"style",
+			";'",
+			"style='",
+			"style",
+			"font-size:24px;font-family:\"Times New Roman\", Times, serif;font-weight:bold;padding:15px 0px;text-align:center;",
+			"font-family:\"Times New Roman\", Times, serif;font-size:20px;",
+			"padding:10px 0px;",
+			"border:thin solid #333 ;background:#CCCCCC;text-align: right;",
+			"border:thin solid #333 ;background:#CCCCCC;",
+			"border:thin solid #333 ;text-align:left;",
+			"border:thin solid #333 ;text-align:right;",
+			"font-family:\"Times New Roman\", Times, serif;font-size:20px;text-align:left;",
+			"font-family:\"Times New Roman\", Times, serif;font-size:12px;text-align:left;",
+			"border:1px solid #333;text-align:left;",
+			"background-color: #transparent",
+			" ",
+			"navigation",
+			"Empleado",
+			"empleado",
+			"cliente",
+			"autosdisponibles",
+			"filaadini",
+			"",
+			"autosdisponibles",
+			"GET",
+			"POST",
+			"50px",
+			"auto"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 6,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/wamp/www/sigesazul/app/Controller/VentasController.php",
+					"settings":
+					{
+						"buffer_size": 6197,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4327,
+								4327
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 990.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/wamp/www/sigesazul/app/View/Ventas/add.ctp",
+					"settings":
+					{
+						"buffer_size": 4252,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3051,
+								3051
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CakePHP (Native)/CakePHP-Template.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 615.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/wamp/www/sigesazul/app/webroot/js/ventas/add.js",
+					"settings":
+					{
+						"buffer_size": 7843,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4658,
+								4658
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 89.0,
+						"translation.y": 900.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/wamp/www/sigesazul/app/Controller/OrdentrabajosController.php",
+					"settings":
+					{
+						"buffer_size": 7565,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1998.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/wamp/www/sigesazul/app/Model/AppModel.php",
+					"settings":
+					{
+						"buffer_size": 1059,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1056,
+								1056
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/wamp/www/sigesazul/app/View/Ventas/edit.ctp",
+					"settings":
+					{
+						"buffer_size": 3356,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2839,
+								2839
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CakePHP (Native)/CakePHP-Template.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/wamp/www/sigesazul/app/Controller/MarcasController.php",
+					"settings":
+					{
+						"buffer_size": 2885,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								438,
+								438
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/wamp/www/sigesazul/app/Controller/ModelosController.php",
+					"settings":
+					{
+						"buffer_size": 3934,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1208,
+								1208
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 89.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 294.0,
+	"status_bar_visible": true
+}
