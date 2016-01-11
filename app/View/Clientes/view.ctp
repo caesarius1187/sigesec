@@ -4,8 +4,10 @@
 <!--Div izquierdo que muestra lista de grupo de clientes con sus clientes-->
 <?php 
 $widthDivClientes=25;
+$GpoCliDeshaHeight = 100;
 if(!$mostrarView){
     $widthDivClientes=95;
+    $GpoCliDeshaHeight = 80;
 }?>
 <div class="clientes_view" style="width:<?php echo $widthDivClientes;?>%; ">
     <?php 
@@ -14,9 +16,10 @@ if(!$mostrarView){
  <?php /**************************************************************************/ ?>
  <?php /*****************************Div CLientes*****************************/ ?>
  <?php /**************************************************************************/ ?>
-<div id="divClientesIndex" class="clientes index" style="margin:0px; overflow:auto;">
-    <table>
-        <td>
+ <div id="divClientesIndex" class="clientes index" style="margin:0px; overflow:auto;">
+    <table style="margin-bottom:20px">
+        <tr>
+        <td style="padding-left: 0px">
             <h2>
                 <?php 
                   if($mostrarView){
@@ -27,7 +30,8 @@ if(!$mostrarView){
                     }            
                 ?>
             </h2>
-        </td>
+            <input placeholder="Buscar Cliente" id="txtBuscarClintes" type="text" style="float:left; width:100%; padding-top:5px" />
+        </td>                
         <td style="text-align: right;" title="Agregar Cliente">
             <div class="fab blue">
             <core-icon icon="add" align="center">
@@ -45,35 +49,43 @@ if(!$mostrarView){
             <paper-ripple class="circle recenteringTouch" fit></paper-ripple>
             </div>
         </td>
-    </table>
-
-    <div class="section_view" >
-        
+        </tr>        
+    </table>    
+    <!--<div class="section_view" >-->
+    <div id="divGrupoClientes_0">
         <?php 
         if(count($clienteses)!=0){
              $grupoMostrar=$clienteses[0]['Grupocliente']['nombre'];
         echo $this->Html->link(
-                        $clienteses[0]['Grupocliente']['nombre'], 
-                        array(
-                            'controller' => 'grupoclientes', 
-                            'action' => 'view', 
-                            $clienteses[0]['Grupocliente']['id']
-                        ),
-                        array('class' => 'lbl_gpo_view')
-                        );
+                                $clienteses[0]['Grupocliente']['nombre'], 
+                                array(
+                                    'controller' => 'grupoclientes', 
+                                    'action' => 'view', 
+                                    $clienteses[0]['Grupocliente']['id']
+                                ),
+                                array('class' => 'lbl_gpo_view', 
+                                      'id' => 'lnkGrupoCliente_'.$clienteses[0]['Grupocliente']['id'],
+                                      'style'=> 'padding-top:5px'
+                                )
+                              );               
          foreach ($clienteses as $clientex): ?>
                 <?php 
                 if($grupoMostrar!=$clientex['Grupocliente']['nombre']){
                     $grupoMostrar=$clientex['Grupocliente']['nombre'];
                     echo "</div>";
-                    echo "<div class='section_view'>";
+                    //echo "<div class='section_view'>";
+                    echo "<div id='divGrupoClientes_".$clientex['Grupocliente']['id']."'>";
                     echo $this->Html->link(
-                                    $clientex['Grupocliente']['nombre'], 
-                                    array(
-                                        'controller' => 'grupoclientes', 
-                                        'action' => 'index', 
-                                    ), 
-                                    array('class' => 'lbl_gpo_view'));
+                                            $clientex['Grupocliente']['nombre'], 
+                                            array(
+                                                'controller' => 'grupoclientes', 
+                                                'action' => 'index', 
+                                            ), 
+                                            array('class' => 'lbl_gpo_view', 
+                                                  'id' => 'lnkGrupoCliente_'.$clientex['Grupocliente']['id'],
+                                                  'style' => 'margin-top:10px'
+                                            )
+                                          );
                 }
                 $classCliente =  "section_cli_view";
                 if($mostrarView){
@@ -89,7 +101,7 @@ if(!$mostrarView){
                                 __($this->Form->label('Cliente', $clientex['Cliente']['nombre'], 'lbl_cli_view',array('style'=>'float:right'))), 
                                 array()), 
                     array('action' => 'view', $clientex['Cliente']['id']),
-                    array('escape'=>false, 'style' => 'text-decoration:none;')
+                    array('escape'=>false, 'style' => 'text-decoration:none; width:100%', 'id' => 'lnkCliente_'.$clientex['Cliente']['id'])
 
                     ); 
                 ?>
@@ -98,7 +110,14 @@ if(!$mostrarView){
         }else{?>
             Agregar Grupos de Clientes
        <?php }
+    echo "</div>";
+
        if(count($clientesesDeshabilitados)!=0){
+        echo '<div id="divClientesBorradosTitulo" style="margin-top:20px; height:'.$GpoCliDeshaHeight.'px">
+              <h2>  Clientes Deshabilitados </h2>
+              <input placeholder="Buscar Cliente Deshabilitado" id="txtBuscarClintesDeshabilitados" type="text" style="float:left; width:97%; padding-top:5px" />
+              </div>
+              <div id="divGpoClienteDeshabilitado_0">';
              $grupoMostrar=$clientesesDeshabilitados[0]['Grupocliente']['nombre'];
         echo $this->Html->link(
                         $clientesesDeshabilitados[0]['Grupocliente']['nombre'], 
@@ -107,23 +126,24 @@ if(!$mostrarView){
                             'action' => 'view', 
                             $clientesesDeshabilitados[0]['Grupocliente']['id']
                         ),
-                        array('class' => 'lbl_gpo_view')
+                        array('class' => 'lbl_gpo_view', 'id' => 'lnkGpoClienteDeshab_0')
                         );
-        echo '<h2>  Clientes Deshabilitados </h3>';
+
          foreach ($clientesesDeshabilitados as $clientex): ?>
                 <?php 
                 if($grupoMostrar!=$clientex['Grupocliente']['nombre']){
                     $grupoMostrar=$clientex['Grupocliente']['nombre'];
                     echo "</div>";
-                    echo "<div class='section_view'>";
+                    echo "<div id='divGpoClienteDeshabilitado_".$clientex['Grupocliente']['id']."'>";
                     echo $this->Html->link(
                                     __($clientex['Grupocliente']['nombre']), 
                                     array(
                                         'controller' => 'grupoclientes', 
                                         'action' => 'index', 
-                                       
+                                        $clientex['Grupocliente']['id']
                                     ), 
-                                    array('class' => 'lbl_gpo_view_deshabilitado'));
+                                    array('class' => 'lbl_gpo_view_deshabilitado', 
+                                          'id' => 'lnkGpoClienteDeshab_'.$clientex['Grupocliente']['id']));
                 }
                 ?>
                 <?php 
@@ -137,15 +157,22 @@ if(!$mostrarView){
                         $divUsuario, 
                         array(
                             'action' => 'habilitar', 
-                            $clientex['Cliente']['id']), 
-                            array('escape'=>false), 
-                            __('Esta seguro que quiere Habilitar a '.$clientex['Cliente']['nombre'].'? Aparecera en todos los Informes', $clientex['Cliente']['id']
+                            $clientex['Cliente']['id']
+                            ), 
+                        array(
+                            'escape'=>false,
+                            'id' => 'lnkClienteDeshab_'.$clientex['Cliente']['id'],
+                            'style' => 'width:100%'
+                            ), 
+                        __('Esta seguro que quiere Habilitar a '.$clientex['Cliente']['nombre'].'? Aparecera en todos los Informes', $clientex['Cliente']['id']
                             )
                     ); ?>    
             <?php endforeach;
         }else{?>
             No hay Clientes Deshabilitados
-       <?php }?>
+       <?php }
+            //echo "</div>";
+       ?>
         
     </div>
 </div>
@@ -179,22 +206,47 @@ if($mostrarView){?>
     <div id="divCliente_Info" style="width:100%; overflow:auto">
 	<table class="tbl_view" cellpadding="0" cellspacing="0">
     	<tr class="rowheaderdatosPersonales"> <!--1. Datos personales-->
-        	<th colspan="7" class="tbl_view_th1">
+        	<th colspan="6" class="tbl_view_th1">
         		<h2 id="lblDatosPeronales" class="h2header">
         			<?php echo $this->Html->image('mas2.png', array('alt' => 'open','id'=>'imgDatosPersonales','class'=>'imgOpenClose'));?>
-        			<?php echo __('Datos personales'); ?>
+        			<?php echo __('Contribuyente'); ?>
         		</h2>
-        	</th>
-           
-             
+        	</th>                    
             <th class="tbl_view_th2">
                 <a href="#" class="button_view" onClick="loadFormEditarPersona()"> 
-                    <?php echo $this->Html->image('edit_view.png', array('alt' => 'edit','class'=>'imgedit'));?>
+                    <?php echo $this->Html->image(
+                                        'edit_view.png', 
+                                        array(
+                                            'alt' => 'edit',
+                                            'class'=>'imgedit',
+                                            'style'=>'color:red;float:left;margin-top:10px'                                            
+                                            )
+                                        );
+                    ?>
                 </a>
+            </th>
+            <th class="tbl_view_th2">
+
+                <?php echo $this->Form->postLink(
+                                         $this->Html->image('ic_delete_black_24dp.png', array(
+                                            'alt' => 'DESHABILITAR',
+                                        )),
+                                        array(
+                                            'controller' => 'Clientes',
+                                            'action' => 'deshabilitar',
+                                            $cliente['Cliente']['id']
+                                        ),
+                                        array(
+                                            'escape' => false, // Add this to avoid Cake from printing the img HTML code instead of the actual image,
+                                            'class'=>' imgedit',
+                                            'style'=>'color:red;float:right;margin-top:10px'
+                                        ),
+                                        __('Esta seguro que quiere Deshabilitar a '.$cliente['Cliente']['nombre'].'? Una vez deshabilitado no aparecera en ningun Informe', $cliente['Cliente']['id'])                                    
+                                ); ?>
             </th>
         </tr>
         <tr class="datosPersonales"><!--1.1 Tabla datos clientes-->
-            <th>
+            <td>
                 <?php 
                 echo $this->Form->create('Cliente',array('action'=>'edit','id'=>'saveDatosPersonalesForm', 'class' => 'form_popin'));            
                 echo $this->Form->input('id',array('type'=>'hidden'));?>
@@ -204,20 +256,22 @@ if($mostrarView){?>
                         <td><?php echo $this->Form->input('tipopersona',array(
                                                             'label'=>'Tipo de Persona',
                                                             'type'=>'select',
+                                                            'style'=>'width:180px',
                                                             'options'=>array('juridica'=>'Juridica','fisica'=>'Fisica'),
                                                             )
                                             ); ?>
                         </td>
-                        <td><?php echo $this->Form->input('tipopersonajuridica',array('label'=>'Tipo de Persona Jur&iacute;dica')); ?></td>
+                        <td><?php echo $this->Form->input('tipopersonajuridica',array('label'=>'Tipo de Persona Jur&iacute;dica','style'=>'width:180px')); ?></td>
                         <td>&nbsp;</td>
                     </tr>    
                     <tr>
                         <td><?php echo $this->Form->input('nombre',array('label'=>array(
                                                                             'text'=>'Apellido y Nombre o Raz&oacuten Social',
-                                                                            'id'=>'clienteEditLabelNombre')
+                                                                            'id'=>'clienteEditLabelNombre',
+                                                                            'style'=>'width:200px')
                                                                             )); ?></td>
-                        <td><?php echo $this->Form->input('cuitcontribullente',array('label'=>'CUIT','size'=>'10')); ?></td>
-                        <td><?php echo $this->Form->input('dni',array('label'=>'DNI', 'size'=>'8')); ?></td>
+                        <td><?php echo $this->Form->input('cuitcontribullente',array('label'=>'CUIT','style'=>'width:180px','maxlength'=>'11','class'=>'numeric')); ?></td>
+                        <td><?php echo $this->Form->input('dni',array('label'=>'DNI', 'style'=>'width:180px','maxlength'=>'8','class'=>'numeric')); ?></td>
                     </tr>    
                     <tr> 
                         <td>
@@ -235,36 +289,27 @@ if($mostrarView){?>
                                  echo $this->Form->input('fchcorteejerciciofiscal', array(
                                             'class'=>'datepicker-day-month', 
                                             'type'=>'text',
+                                            'value'=>date('m-Y',strtotime($this->request->data['Cliente']['fchcorteejerciciofiscal'])),
                                             'label'=>'Fecha de Corte de Ejer. Fiscal',                                    
                                             'readonly'=>'readonly')
                                  );?>
                         </td>    
                         <td><?php echo $this->Form->input('anosduracion',array(
                                             'label'=>'A&ntilde;os de Duraci&oacute;n',
-                                            'size' =>'4')
+                                            'style'=>'width:180px')
                                  ); ?>
                         </td>
-                    </tr>   
-                        <!--<?php echo $this->Form->input('numinscripcionconveniomultilateral',array('label'=>'Nro. de Inscrip. en Conv. Multilateral')); ?></td>-->
+                    </tr>                          
                     <tr>    
                         <td>
                         <?php 
-                            echo $this->Form->input('inscripcionregistrocomercio', array(
-                                'class'=>'datepicker', 
+                            echo $this->Form->input('inscripcionregistrocomercio', array(                                
                                 'type'=>'text',                                            
-                                'value'=>date('d-m-Y',strtotime($this->request->data['Cliente']['inscripcionregistrocomercio'])),
+                                //'value'=>$inscripcionRPC,
                                 'label'=>'Inscripci&oacute;n en RPC',                                    
-                                'readonly'=>'readonly')
+                               )
                             );?>
-                        </td>
-                        <td><?php 
-                            echo $this->Form->input('modificacionescontrato',array('label'=>'Modificaciones al Contrato')); ?>
-                        </td>
-                    <tr>
-                        <td colspan="3">
-                            <?php echo $this->Form->input('descripcionactividad',array('label'=>'Descripci&oacute;n de Actividad','style'=>'width:95%')); ?>
-                        </td>
-                    </tr>
+                        </td>                                          
                     </tr>        
                     <tr>    
                         <td>
@@ -273,7 +318,7 @@ if($mostrarView){?>
                                             'class'=>'datepicker', 
                                             'value'=>date('d-m-Y',strtotime($this->request->data['Cliente']['fchiniciocliente'])),
                                             'type'=>'text',
-                                            'label'=>'Cliente desde',                                    
+                                            'label'=>'Cliente alta',                                    
                                             'readonly'=>'readonly')
                                  );?>
                         </td>
@@ -283,7 +328,7 @@ if($mostrarView){?>
                                             'class'=>'datepicker', 
                                             'value'=>date('d-m-Y',strtotime($this->request->data['Cliente']['fchfincliente'])),
                                             'type'=>'text',
-                                            'label'=>'Cliente hasta',                                    
+                                            'label'=>'Cliente baja',                                    
                                             'readonly'=>'readonly')
                                  );?>
                         </td>  
@@ -292,16 +337,8 @@ if($mostrarView){?>
                     </span>
                     <tr id="rowButtonsDetallesPersonales" style="display:none">
                         <td>
-                             <?php $divUsuario =  'DESHABILITAR';
-                                echo $this->Form->postLink(
-                                    $divUsuario, 
-                                    array(
-                                        'action' => 'deshabilitar', 
-                                        $cliente['Cliente']['id']), 
-                                        array('escape'=>false,'class'=>'btn_aceptar','style'=>'color:red;float:left'), 
-                                        __('Esta seguro que quiere Deshabilitar a '.$cliente['Cliente']['nombre'].'? No aparecera en ningun Informe', $cliente['Cliente']['id']
-                                        )
-                                ); ?>
+                            
+                            
                         </td>
                         <td>&nbsp;</td>
                         <td align="right">  
@@ -309,7 +346,7 @@ if($mostrarView){?>
                         </td>                        
                     </tr>
                 </table>
-            </th>
+            </td>
         </tr>        
  <?php /**************************************************************************/ ?>
  <?php /*****************************Domicilios***********************************/ ?>
@@ -333,9 +370,9 @@ if($mostrarView){?>
             <table id="relatedDomicilios" class="tbl_related">
                 <head>
                      <tr class="domicilio">    
-                        <th><?php echo __('Calle'); ?></th>     
-                        <th><?php echo __('Telefono'); ?></th>  
-                        <th><?php echo __('Movil'); ?></th>     
+                        <th><?php echo __('Domicilio'); ?></th>     
+                        <th><?php echo __('Provincia'); ?></th>  
+                        <th><?php echo __('Localidad'); ?></th>     
                         <th><?php echo __('Acciones'); ?></th>    
                      </tr>  
                      <tr>
@@ -345,14 +382,29 @@ if($mostrarView){?>
                 <tbody>
             <?php if (!empty($cliente['Domicilio'])): ?>      
               <?php foreach ($cliente['Domicilio'] as $domicilio): ?>     
-                     <tr >    
-                        <td><?php echo h($domicilio['calle'].' '.$domicilio['numero']); ?></td> 
-                        <td><?php echo h($domicilio['telefono']); ?></td>
-                        <td><?php echo h($domicilio['movil']); ?></td> 
+                     <tr id="rowdomicilio<?php echo $domicilio['id']; ?>" >    
+                        <td><?php echo h($domicilio['calle']); ?></td> 
+                        <td><?php echo h($domicilio['Localidade']['Partido']['nombre']); ?></td>
+                        <td><?php echo h($domicilio['Localidade']['nombre']); ?></td> 
                         <td class="">
                             <a href="#"  onclick="loadFormDomicilio(<?php echo$domicilio['id']; ?>,<?php echo $domicilio['cliente_id'];?>)" class="button_view"> 
                              <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?>
                             </a> 
+                            <?php echo $this->Form->postLink(
+                                         $this->Html->image('ic_delete_black_24dp.png', array(
+                                            'alt' => 'Eliminar',
+                                        )),
+                                        array(
+                                            'controller' => 'Domicilios',
+                                            'action' => 'delete',
+                                            $domicilio['id'],
+                                            $domicilio['cliente_id']
+                                        ),
+                                        array(
+                                            'escape' => false // Add this to avoid Cake from printing the img HTML code instead of the actual image
+                                        ),
+                                        __('Esta seguro que quiere eliminar este domicilio?')                                    
+                                ); ?>
                         </td>
                     </tr>      
                            
@@ -370,7 +422,7 @@ if($mostrarView){?>
             <th colspan="7" class="tbl_view_th1">
                 <h2 class="h2header" id="lblPersona">
                 <?php echo $this->Html->image('mas2.png', array('alt' => 'open','id'=>'imgPersona','class'=>'imgOpenClose'));?>
-                <?php echo __('Personas Relacionadas'); ?>
+                <?php echo __('Contactos'); ?>
                </h2>
             </th>
             <th class="tbl_view_th2">
@@ -386,7 +438,7 @@ if($mostrarView){?>
                      <tr >    
                         <th><?php echo __('Tipo'); ?></th>     
                         <th><?php echo __('Nombre'); ?></th>  
-                        <th><?php echo __('Telefono'); ?></th>  
+                        <th><?php echo __('Movil'); ?></th>  
                         <th><?php echo __('Acciones'); ?></th>     
                      </tr>  
                      <tr>
@@ -396,14 +448,29 @@ if($mostrarView){?>
                 <tbody>
               <?php if (!empty($cliente['Personasrelacionada'])): ?>      
               <?php foreach ($cliente['Personasrelacionada'] as $persona): ?>     
-                     <tr >    
+                     <tr id="rowpersonarelacionada<?php echo h($persona['id']); ?>" >    
                         <td><?php echo h(ucfirst ($persona['tipo'])); ?></td>
                         <td><?php echo h($persona['nombre']); ?></td> 
-                        <td><?php echo h($persona['telefono']); ?></td>
+                        <td><?php echo h($persona['movil']); ?></td>
                         <td class="">
-                            <a href="#"  onclick="loadFormPersonaRelacionada(<?php echo$persona['id']; ?>,<?php echo $persona['cliente_id'];?>)" class="button_view"> 
+                            <a href="#"  onclick="loadFormPersonaRelacionada(<?php echo$persona['id']; ?>,<?php echo $persona['cliente_id'];?>,'rowpersonarelacionada<?php echo h($persona['id']); ?>')" class="button_view"> 
                                 <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?> 
-                            </a>                     
+                            </a>      
+                             <?php echo $this->Form->postLink(
+                                         $this->Html->image('ic_delete_black_24dp.png', array(
+                                            'alt' => 'Eliminar',
+                                        )),
+                                        array(
+                                            'controller' => 'Personasrelacionadas',
+                                            'action' => 'delete',
+                                            $persona['id'],
+                                            $persona['cliente_id']
+                                        ),
+                                        array(
+                                            'escape' => false // Add this to avoid Cake from printing the img HTML code instead of the actual image
+                                        ),
+                                        __('Esta seguro que quiere eliminar esta persona relacionada?')                                    
+                                ); ?>               
                         </td>
                     </tr>      
                            
@@ -414,6 +481,65 @@ if($mostrarView){?>
              </table>  
             </td>
         </tr>
+ <?php /**************************************************************************/ ?>
+ <?php /*****************************Actividades Relacionadas************************/ ?>
+ <?php /**************************************************************************/ ?>        
+        <tr class="rowheaderactividades"> <!--4. Persona relacionada-->
+            <th colspan="7" class="tbl_view_th1">
+                <h2 class="h2header" id="lblActividad">
+                <?php echo $this->Html->image('mas2.png', array('alt' => 'open','id'=>'imgActividad','class'=>'imgOpenClose'));?>
+                <?php echo __('Actividades'); ?>
+               </h2>
+            </th>
+            <th class="tbl_view_th2">
+                <a href="#nuevo_actividad" class="button_view"> 
+                    <?php echo $this->Html->image('add_view.png', array('alt' => 'edit','class'=>'imgedit'));?>
+                </a>
+            </th>
+        </tr>
+        <tr class="actividades">
+            <td colspan="7">
+            <table id="relatedActividades" class="tbl_related"> <!--Tabla Persona Relacionada-->
+                <head>
+                     <tr >    
+                        <th><?php echo __('Descripcion'); ?></th>                          
+                        <th><?php echo __('Acciones'); ?></th>     
+                     </tr>  
+                     <tr>
+                        <th colspan="6"><hr color="#E4E4E4" width="100%"></th> 
+                     </tr>
+                </head>     
+                <tbody>
+              <?php if (!empty($cliente['Actividade'])): ?>      
+              <?php foreach ($cliente['Actividade'] as $actividad): ?>     
+                     <tr >    
+                        <td><?php echo h($actividad['descripcion']); ?></td> 
+                        <td class="">
+                            <?php echo $this->Form->postLink(
+                                         $this->Html->image('ic_delete_black_24dp.png', array(
+                                            'alt' => 'Eliminar',
+                                        )),
+                                        array(
+                                            'controller' => 'Actividades',
+                                            'action' => 'delete',
+                                            $actividad['id'],
+                                            $actividad['cliente_id']
+                                        ),
+                                        array(
+                                            'escape' => false // Add this to avoid Cake from printing the img HTML code instead of the actual image
+                                        ),
+                                        __('Esta seguro que quiere eliminar esta actividad?')                                    
+                                ); ?>
+                        </td>
+                    </tr>      
+                           
+             <?php endforeach; ?>
+                
+            <?php endif; ?>   
+                </tbody>
+             </table>  
+            </td>
+        </tr>       
  <?php /**************************************************************************/ ?>
  <?php /*****************************Facturacion***********************************/ ?>
  <?php /**************************************************************************/ ?>       
@@ -503,7 +629,7 @@ if($mostrarView){?>
                         <tr>      
                              <td>
                                 
-                                <?php echo $this->Form->input('usuario',array('default'=>$organizmo['usuario'],'label'=>'Cuit')); ?></td>
+                                <?php echo $this->Form->input('usuario',array('default'=>$organizmo['usuario'],'label'=>'CUIT')); ?></td>
                              <td><?php echo $this->Form->input('clave',array('default'=>$organizmo['clave'],'label'=>'Clave')); ?></td>
                              <td><?php echo $this->Form->end('Guardar');?></td>
                         </tr>
@@ -518,13 +644,11 @@ if($mostrarView){?>
             <table id="tablaImpAfip" class="tbl_related">    
                 <tr>    
                     <th><?php echo __('Impuesto'); ?></th>
-                    <th><?php echo __('Descripcion'); ?></th>                   
-                    <th><?php echo __('Estado'); ?></th>
+                    <th><?php echo __('Alta'); ?></th>                   
                     <th><?php echo __('Acciones'); ?></th>
                     <th >
                         <a href="#nuevoImpcliAfip" class="button_view"> 
                             <?php echo $this->Html->image('add_view.png', array('alt' => 'edit','class'=>'imgedit'));?>
-
                         </a>                                            
                     </th>  
                 </tr>  
@@ -536,8 +660,11 @@ if($mostrarView){?>
                         <?php if ($impcli['Impuesto']['organismo']=='afip'): ?>    
                              <tr id="rowImpcli<?php echo $impcli['id']?>" >                                                
                                 <td><?php echo $impcli['Impuesto']['nombre']; ?></td>
-                                <td><?php echo $impcli['descripcion']; ?></td>                                
-                                <td><?php echo $impcli['estado']; ?></td>
+                                <td>
+                                <?php if(count($impcli['Periodosactivo'])){
+                                    echo $impcli['Periodosactivo'][0]['desde'];
+                                }?>
+                                </td>                                
                                 <td>
                                     <a href="#"  onclick="loadFormImpuesto(<?php echo$impcli['id']; ?>,<?php echo $impcli['cliente_id'];?>)" class="button_view"> 
                                      <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?>
@@ -582,7 +709,7 @@ if($mostrarView){?>
                         <?php echo $this->Form->input('id',array('type'=>'hidden','default'=>$organizmo['id'],'label'=>false)); ?>
                         <table>
                             <tr>      
-                                 <td><?php echo $this->Form->input('usuario',array('default'=>$organizmo['usuario'],'label'=>'Cuit')); ?></td>
+                                 <td><?php echo $this->Form->input('usuario',array('default'=>$organizmo['usuario'],'label'=>'CUIT')); ?></td>
                                  <td><?php echo $this->Form->input('clave',array('default'=>$organizmo['clave'],'label'=>'Clave')); ?></td>
                                  <td><?php echo $this->Form->end('Guardar');?></td>
                             </tr>
@@ -598,8 +725,7 @@ if($mostrarView){?>
                     <tr>    
                         
                         <th><?php echo __('Impuesto'); ?></th>
-                        <th><?php echo __('Descripcion'); ?></th>                        
-                        <th><?php echo __('Estado'); ?></th>
+                        <th><?php echo __('Alta'); ?></th>                        
                         <th><?php echo __('Acciones'); ?></th>
                         <th>
                             <a href="#nuevo_DGR" class="button_view"> 
@@ -615,8 +741,11 @@ if($mostrarView){?>
                             <?php if ($impcli['Impuesto']['organismo']=='dgr'): ?>    
                                  <tr id="rowImpcli<?php echo $impcli['id']?>">                                                
                                     <td><?php echo $impcli['Impuesto']['nombre']; ?></td>
-                                    <td><?php echo $impcli['descripcion']; ?></td>                                    
-                                    <td><?php echo $impcli['estado']; ?></td>
+                                    <td>
+                                    <?php if(count($impcli['Periodosactivo'])){
+                                        echo $impcli['Periodosactivo'][0]['desde'];
+                                    }?>
+                                    </td>                                   
                                     <td>
                                         <a href="#"  onclick="loadFormImpuesto(<?php echo$impcli['id']; ?>,<?php echo $impcli['cliente_id'];?>)" class="button_view"> 
                                          <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?>
@@ -661,7 +790,7 @@ if($mostrarView){?>
                         <?php echo $this->Form->input('id',array('type'=>'hidden','default'=>$organizmo['id'],'label'=>false)); ?>
                         <table>
                             <tr>      
-                                 <td><?php echo $this->Form->input('usuario',array('default'=>$organizmo['usuario'],'label'=>'Cuit')); ?></td>
+                                 <td><?php echo $this->Form->input('usuario',array('default'=>$organizmo['usuario'],'label'=>'Usuario')); ?></td>
                                  <td><?php echo $this->Form->input('clave',array('default'=>$organizmo['clave'],'label'=>'Clave')); ?></td>
                                  <td><?php echo $this->Form->end('Guardar',array(),array('style'=>'margin:0px'));?></td>
                             </tr>
@@ -677,8 +806,7 @@ if($mostrarView){?>
             <table id="tablaImpDGRM" class="tbl_related">    
                 <tr>     
                     <th><?php echo __('Impuesto'); ?></th>
-                    <th><?php echo __('Descripci&oacute;n'); ?></th>                   
-                    <th><?php echo __('Estado'); ?></th>
+                    <th><?php echo __('Alta'); ?></th>                   
                     <th><?php echo __('Acciones'); ?></th>    
                     <th> <a href="#nuevo_DGRM" class="button_view"> 
                             <?php echo $this->Html->image('add_view.png', array('alt' => 'add','class'=>'imgedit'));?>
@@ -693,8 +821,11 @@ if($mostrarView){?>
                         <?php if ($impcli['Impuesto']['organismo']=='dgrm'): ?>    
                              <tr id="rowImpcli<?php echo $impcli['id']?>">                                                
                                 <td><?php echo $impcli['Impuesto']['nombre']; ?></td>
-                                <td><?php echo $impcli['descripcion']; ?></td>                               
-                                <td><?php echo $impcli['estado']; ?></td>
+                                <td>
+                                <?php if(count($impcli['Periodosactivo'])){
+                                    echo $impcli['Periodosactivo'][0]['desde'];
+                                }?>
+                                </td>                               
                                 <td>
                                     <a href="#"  onclick="loadFormImpuesto(<?php echo$impcli['id']; ?>,<?php echo $impcli['cliente_id'];?>)" class="button_view"> 
                                      <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?>
@@ -731,10 +862,7 @@ if($mostrarView){?>
             <table id="tablaImpSINDICATO" class="tbl_related">    
                 <tr>     
                     <th><?php echo __('Impuesto'); ?></th>
-                    <th><?php echo __('Usuario'); ?></th>
-                    <th><?php echo __('Clave'); ?></th>
-                    <th><?php echo __('Descripci&oacute;n'); ?></th>                   
-                    <th><?php echo __('Estado'); ?></th>
+                    <th><?php echo __('Alta'); ?></th>                   
                     <th><?php echo __('Acciones'); ?></th>    
                     <th>
                         <a href="#nuevo_SINDICATO" class="button_view"> 
@@ -750,13 +878,17 @@ if($mostrarView){?>
                         <?php if ($impcli['Impuesto']['organismo']=='sindicato'): ?>    
                              <tr id="rowImpcli<?php echo $impcli['id']?>">                                                
                                 <td><?php echo $impcli['Impuesto']['nombre']; ?></td>
-                                <td><?php echo $impcli['usuario']; ?></td>
-                                <td><?php echo $impcli['clave']; ?></td>
-                                <td><?php echo $impcli['descripcion']; ?></td>                                
-                                <td><?php echo $impcli['estado']; ?></td>
+                                <td>
+                                <?php if(count($impcli['Periodosactivo'])){
+                                    echo $impcli['Periodosactivo'][0]['desde'];
+                                }?>
+                                </td>                               
                                 <td>
                                     <a href="#"  onclick="loadFormImpuesto(<?php echo$impcli['id']; ?>,<?php echo $impcli['cliente_id'];?>)" class="button_view"> 
-                                     <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?>
+                                        <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?>
+                                    </a>
+                                    <a href="#"  onclick="loadFormImpuestoPeriodos(<?php echo$impcli['id']; ?>)" class="button_view"> 
+                                        <?php echo $this->Html->image('calendario.png', array('alt' => 'open','class'=>'imgedit'));?>
                                     </a>
                                 </td>
                             </tr>
@@ -767,9 +899,9 @@ if($mostrarView){?>
             </td>
         </tr>
         <!--FIN Impuestos del Organizmo -->
-<?php /**************************************************************************/ ?>
-<?php /*****************************Bancos***************************************/ ?>      
-<?php /**************************************************************************/ ?>                   
+ <?php /**************************************************************************/ ?>
+ <?php /*****************************Bancos***************************************/ ?>      
+ <?php /**************************************************************************/ ?>                   
         <tr  class="rowheaderbancos" ><!--9.1. BANCO-->
             <th  colspan="7" class="tbl_view_th1">
                 <h2 class="h2header" id="lblBANCO">
@@ -785,14 +917,9 @@ if($mostrarView){?>
             <td colspan="7"> 
             <table id="tablaImpBanco" class="tbl_related">    
                 <tr>     
-                    <th><?php echo __('Banco'); ?></th>
-                    <th><?php echo __('Descripci&oacute;n'); ?></th>
-                    <th><?php echo __('Usuario'); ?></th>
-                    <th><?php echo __('Clave'); ?></th>
-                    <th><?php echo __('Desde'); ?></th>
-                    <th><?php echo __('Hasta'); ?></th>
-                    <th><?php echo __('Estado'); ?></th>
-                    <th><?php echo __('Acciones'); ?></th>     
+                    <th><?php echo __('Impuesto'); ?></th>
+                    <th><?php echo __('Alta'); ?></th>                   
+                    <th><?php echo __('Acciones'); ?></th>                                
                     <th>
                         <a href="#nuevo_Banco" class="button_view"> 
                             <?php echo $this->Html->image('add_view.png', array('alt' => 'add','class'=>'imgedit'));?>
@@ -805,20 +932,22 @@ if($mostrarView){?>
                 <?php if (!empty($cliente['Impcli'])): ?>                            
                     <?php foreach ($cliente['Impcli'] as $impcli): ?>
                         <?php if ($impcli['Impuesto']['organismo']=='banco'): ?>    
-                             <tr id="rowImpcli<?php echo $impcli['id']?>">                                                
+                            <tr id="rowImpcli<?php echo $impcli['id']?>">                                                
                                 <td><?php echo $impcli['Impuesto']['nombre']; ?></td>
-                                <td><?php echo $impcli['usuario']; ?></td>
-                                <td><?php echo $impcli['clave']; ?></td>
-                                <td><?php echo $impcli['descripcion']; ?></td>
-                                <td><?php echo $impcli['desde']; ?></td>
-                                <td><?php echo $impcli['hasta']; ?></td>
-                                <td><?php echo $impcli['estado']; ?></td>
+                                <td>
+                                <?php if(count($impcli['Periodosactivo'])){
+                                    echo $impcli['Periodosactivo'][0]['desde'];
+                                }?>
+                                </td>                               
                                 <td>
                                     <a href="#"  onclick="loadFormImpuesto(<?php echo$impcli['id']; ?>,<?php echo $impcli['cliente_id'];?>)" class="button_view"> 
-                                     <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?>
+                                        <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?>
+                                    </a>
+                                    <a href="#"  onclick="loadFormImpuestoPeriodos(<?php echo$impcli['id']; ?>)" class="button_view"> 
+                                        <?php echo $this->Html->image('calendario.png', array('alt' => 'open','class'=>'imgedit'));?>
                                     </a>
                                 </td>
-                            </tr>
+                            </tr>                            
                          <?php endif;    ?>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -929,6 +1058,16 @@ if($mostrarView){?>
  <?php /*****************************Inicio de POPINS***********************************/ ?>
  <?php /**************************************************************************/ ?>
 
+
+ <?php /**************************************************************************/ ?>
+ <?php /*****************************Inicio de POPINS***********************************/ ?>
+ <?php /**************************************************************************/ ?>
+
+
+ <?php /**************************************************************************/ ?>
+ <?php /*****************************Inicio de POPINS***********************************/ ?>
+ <?php /**************************************************************************/ ?>
+
 <!-- Inicio Popin Nuevo Domicilio -->
 <a href="#x" class="overlay" id="nuevo_domicilio"></a>
 <div class="popup">
@@ -940,83 +1079,36 @@ if($mostrarView){?>
                     echo $this->Form->input('cliente_id',array('default'=>$cliente['Cliente']['id'],'type'=>'hidden'));
                 ?>
                     <table cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                            <!--<td><?php  echo $this->Form->input('tipo', array('label'=>'Tipo'));?></td>   
-                            <td><?php echo $this->Form->input('sede', array('label'=>'Sede'));?></td>  
-                            <td><?php echo $this->Form->input('nombrefantasia', array('label'=>'Nombre fantas&iacute;a'));?></td>  -->
-                        </tr>
+                      
                         <tr>  
-                            <td colspan="4">
-                                <table>
-                                    <tr>
-                                        <td style="width: 150px;"><?php  echo $this->Form->input('tipo', array('label'=>'Tipo','type'=>'select','options'=>array('comercial'=>'Comercial','fiscal'=>'Fiscal','personal'=>'Personal','laboral'=>'Laboral')));?></td> 
-                                        <?php //<td>echo $this->Form->input('puntodeventa', array('label'=>'Pto. Vta.', 'size' => '4'));</td>?>
-                                        <td><?php echo $this->Form->input('fechainicioagregardomicilio', array(
-                                                'class'=>'datepicker', 
-                                                'type'=>'text',
-                                                'size'=>'10',
-                                                'label'=>'Fecha de Inicio',                                    
-                                                'readonly'=>'readonly')
-                                            );?>
-                                        </td>
-                                        <td></td> 
-                                    </tr>
-                                </table>             
-                            </td>            
-                        </tr>
-                        <tr>    
-
-                        </tr>
-                            <td><?php echo $this->Form->input('partido_id', array('label'=>'Provincia','default','onChange'=>'getLocalidadesForDomicilios()'));?></td>
+                            <td style="width: 150px;"><?php  echo $this->Form->input('tipo', array('label'=>'Tipo','type'=>'select','options'=>array('comercial'=>'Comercial','fiscal'=>'Fiscal','personal'=>'Personal','laboral'=>'Laboral')));?>
+                            </td>                         
+                            <td><?php echo $this->Form->input('partido_id', array('label'=>'Provincia','default','onChange'=>'getLocalidades("DomicilioAddForm","DomicilioPartidoId","DomicilioLocalidadeId")'));?></td>
                             <td><?php echo $this->Form->input('localidade_id', array('label'=>'Localidad'));?></td>
-                            <td>&nbsp;</td>
-                           
-                        <tr>
-                            <td><?php echo $this->Form->input('calle', array('label'=>'Calle'));?></td> 
-                            <td colspan="2" style="padding:0px;">
-                                <table style="margin:0px; padding:0px;" cellpadding="0" cellspacing="0" border="0"> 
-                                <tr> 
-                                    <td><?php echo $this->Form->input('numero', array('label'=>'Nº', 'size' => '6'));?></td>
-                                    <td><?php echo $this->Form->input('piso', array('label'=>'Piso', 'size' => '3'));?></td>    
-                                    <td><?php echo $this->Form->input('ofidepto', array('label'=>'Of./Dpto.', 'size' => '3'));?></td>                   
-                                    <td><?php echo $this->Form->input('ruta', array('label'=>'Ruta', 'size' => '8'));?></td>    
-                                    <td><?php echo $this->Form->input('kilometro', array('label'=>'Km.', 'size' => '3'));?></td>
-                                    <td><?php echo $this->Form->input('torre', array('label'=>'Torre', 'size' => '3'));?></td>   
-                                    <td><?php echo $this->Form->input('manzana', array('label'=>'Manzana', 'size' => '3'));?></td>
-                                </tr>
-                                </table>
-                            </td>
-                         </tr>
-                         <tr>
-                            <td><?php echo $this->Form->input('entrecalles', array('label'=>'Entre calles'));?></td>    
                             <td><?php echo $this->Form->input('codigopostal', array('label'=>'C&oacute;d. Postal', 'size' => '3'));?></td>
-                            <td>&nbsp;</td>
-                         </tr>
-                         <tr> 
-                             <td><?php echo $this->Form->input('telefono', array('label'=>'Tel&eacute;fono', 'size' => '11'));?></td>  
-                             <td><?php echo $this->Form->input('movil', array('label'=>'M&oacute;vil', 'size' => '11'));?></td>
-                             <td><?php echo $this->Form->input('fax', array('label'=>'Fax', 'size' => '11'));?></td>     
-                         </tr>
-                         <tr> 
-                            <td><?php echo $this->Form->input('email',array('label'=>'E-mail'));?></td>
-                            <td><?php echo $this->Form->input('personacontacto', array('label'=>'Persona contacto'));?></td>  
-                            <td><?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'size' => '35'));?></td>    
+                        </tr>   
+                        <tr>
+                            <td colspan="5"><?php echo $this->Form->input('calle', array('label'=>'Domicilio','style'=>'width:95%'));?></td> 
+                           
+                         </tr>                                                
+                         <tr>                            
+                            <td colspan="5"><?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'size' => '35'));?></td>    
                          </tr> 
                           <tr> 
                             <td></td>    
-                            <td><a href="#close"  onclick="" class="btn_cancelar">Cancelar</a></td>    
+                            <td><a href="#close"  onclick="" class="btn_cancelar" style="margin-top:14px">Cancelar</a></td>    
                             <td><?php echo $this->Form->end('Agregar');?></td>    
                          </tr>     
             </table>
         </div>
     <a class="close" href="#close"></a>
-</div>
+</div>|
 <!-- Fin Popin Nuevo Domicilio --> 
 
 <!-- Inicio Popin Modificar Domicilio-->
 <a href="#x" class="overlay" id="modificar_domicilio"></a>
 <div class="popup">
-        <div id="form_modificar_domicilio" class="domicilio form">          
+        <div id="form_modificar_domicilio">          
         </div>
     <a class="close" href="#close"></a>
 </div>
@@ -1028,7 +1120,7 @@ if($mostrarView){?>
         <div id="form_persona" >
             <?php echo $this->Form->create('Personasrelacionada',array('controller'=>'Personasrelacionadas','action'=>'add')); ?>
 
-                <h3><?php echo __('Agregar persona relacionada'); ?></h3>
+                <h3><?php echo __('Agregar Contacto'); ?></h3>
                 <?php
                     echo $this->Form->input('cliente_id',array('default'=>$cliente['Cliente']['id'],'type'=>'hidden'));
                 ?>
@@ -1039,15 +1131,25 @@ if($mostrarView){?>
                         </td>
                         <td>
                             <?php echo $this->Form->input('documento');?>
+                        </td> 
+                        <td>
+                            <?php echo $this->Form->input('cuit',array('label'=>'CUIT'));?>
                         </td>                         
                          <td><?php echo $this->Form->input('tipo',array('type'=>'select','options'=>array(
-                            'conyuge'=>'Conyuge','socio'=>'Socio','familiar'=>'Familiar','representante'=>'Representante','presidente'=>'Presidente','gerente'=>'Gerente'
+                            'conyuge'=>'Conyuge',
+                            'familiar'=>'Familiar',
+                            'representante'=>'Representante',
+                            'socio'=>'Socio',                            
+                            'presidente'=>'Presidente',
+                            'gerente'=>'Gerente',
+                            'titular'=>'Titular',
+                            'empleado'=>'Empleado',
+                            'encargado'=>'Encargado',
                         )));?>
                         </td>
                                                
                     </tr>
-                      <tr>
-                       
+                    <!--<tr>                       
                         <td><?php echo $this->Form->input('vtomandato', array(
                                             'class'=>'datepicker', 
                                             'type'=>'text',
@@ -1058,15 +1160,14 @@ if($mostrarView){?>
                         </td>                         
                         <td width="12%"><?php echo $this->Form->input('porcentajeparticipacion', array('label'=>'% Pci&oacute;n', 'style' => 'width:40px;'));?></td>                       
                         <td ></td>
-                    </tr>
+                    </tr>-->
                     </tr>
                         <td><?php echo $this->Form->input('partido_id', array('label'=>'Localidad'));?></td>
                         <td><?php echo $this->Form->input('localidade_id', array('label'=>'Localidad'));?></td>
-                        <td>&nbsp;</td>
-                       
+                        <td><?php echo $this->Form->input('codigopostal', array('label'=>'C&oacute;d. Postal', 'size' => '3'));?></td>
                     <tr>
-                        <td><?php echo $this->Form->input('calle', array('label'=>'Calle'));?></td> 
-                        <td colspan="2" style="padding:0px;">
+                        <td colspan="5"><?php echo $this->Form->input('calle', array('label'=>'Domicilio','style'=>'width:95%'));?></td> 
+                        <!--<td colspan="2" style="padding:0px;">
                             <table style="margin:0px; padding:0px;" cellpadding="0" cellspacing="0" border="0"> 
                             <tr> 
                                 <td><?php echo $this->Form->input('numero', array('label'=>'Nº', 'size' => '6'));?></td>
@@ -1078,25 +1179,23 @@ if($mostrarView){?>
                                 <td><?php echo $this->Form->input('manzana', array('label'=>'Manzana', 'size' => '3'));?></td>
                             </tr>
                             </table>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td><?php echo $this->Form->input('entrecalles', array('label'=>'Entre calles'));?></td>    
-                        <td><?php echo $this->Form->input('codigopostal', array('label'=>'C&oacute;d. Postal', 'size' => '3'));?></td>
-                        <td>&nbsp;</td>
-                     </tr>
+                        </td>-->
+                     </tr>                    
                      <tr> 
-                         <td><?php echo $this->Form->input('telefono', array('label'=>'Tel&eacute;fono', 'size' => '11'));?></td>  
-                         <td><?php echo $this->Form->input('movil', array('label'=>'M&oacute;vil', 'size' => '11'));?></td>
-                         <td><?php echo $this->Form->input('fax', array('label'=>'Fax', 'size' => '11'));?></td>     
-                     </tr>
-                     <tr> 
+                        <td><?php echo $this->Form->input('telefono', array('label'=>'Tel&eacute;fono', 'size' => '11'));?></td>  
+                        <td><?php echo $this->Form->input('movil', array('label'=>'M&oacute;vil', 'size' => '11'));?></td>
                         <td><?php echo $this->Form->input('email',array('label'=>'E-mail'));?></td>
-                        <td colspan="2"><?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'size' => '35'));?></td>    
+                        <td></td>     
+                     </tr>
+                     <tr> 
+                        <td colspan="4"><?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'size' => '35'));?></td>    
                      </tr>    
                     <tr>
                         <td>&nbsp;</td>
-                        <td><a href="#close" onclick="" class="btn_cancelar" style="">Cancelar</a></td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a href="#close" onclick="" class="btn_cancelar" style="margin-top:15px">Cancelar</a>
+                        </td>
                         <td align="right">
                             <?php echo $this->Form->end(__('Agregar',array('class' =>'btn_aceptar'))); ?>                          
                         </td>
@@ -1107,6 +1206,36 @@ if($mostrarView){?>
 </div>
 <!-- Fin Popin Nueva Persona Relacionada--> 
 
+<!-- Inicio Popin Nueva Actividad Relacionada -->
+<a href="#x" class="overlay" id="nuevo_actividad"></a>
+<div class="popup">
+        <div id="form_actividad" >
+            <?php echo $this->Form->create('Actividade',array('controller'=>'Actividade','action'=>'add')); ?>
+
+                <h3><?php echo __('Agregar Actividad'); ?></h3>
+                <?php
+                    echo $this->Form->input('cliente_id',array('default'=>$cliente['Cliente']['id'],'type'=>'hidden'));
+                ?>
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td>
+                            <?php echo $this->Form->input('descripcion',array('label'=>'Descripcion'));?>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>                                                                                                                                                
+                    <tr>
+                        <td>
+                            <a href="#close" onclick="" class="btn_cancelar" style="margin-top:15px">Cancelar</a>
+                        </td>
+                        <td align="right">
+                            <?php echo $this->Form->end(__('Agregar',array('class' =>'btn_aceptar'))); ?>                          
+                        </td>
+                    </tr>
+                </table>
+        </div>
+    <a class="close" href="#close"></a>
+</div>
+<!-- Fin Popin Nueva Actividadd Relacionada--> 
  <!-- Inicio Popin Editar Facturacion -->
 <a href="#x" class="overlay" id="editarFacturacion"></a>
 <div id="divNuevoCbu" class="popup" style="width:45%">
@@ -1185,7 +1314,7 @@ if($mostrarView){?>
 <!-- Inicio Popin Modificar Persona-->
 <a href="#x" class="overlay" id="modificar_persona"></a>
 <div class="popup">
-        <div id="form_modificar_persona" class="persona form" style="width:100%">   
+        <div id="form_modificar_persona" class="persona" style="width:100%">   
         </div>
     <a class="close" href="#close"></a>
 </div>
@@ -1240,14 +1369,62 @@ if($mostrarView){?>
                     echo $this->Form->input('cliente_id',array('default'=>$cliente['Cliente']['id'],'type'=>'hidden'));?>
                     <table cellpadding="0" cellspacing="0" border="0">
                     <tr>
-                        <td colspan="4"><?php echo $this->Form->input('impuesto_id', array('empty'=>'Seleccionar Impuesto', 'div' => false ,'type'=>'select', 'options'=>$impuestosafip));?></td>
+                        <?php
+                        //ya traemos todos los impuestos de afip junto con los periodos abiertos de cada uno
+                        //asi que si vemos que un impuesto tiene un periodo abiero no tenemos que agregarlo a la variable de esta lista
+                        //hay que armar el array de opciones por que no las tenemos disponibles
+                        $listaAfip = array ();
+                        foreach ($impuestosafip as $impAfip) {
+                            $agregarImpuesto = true;
+                            foreach ($impAfip['Impcli'] as $impcliAfip) 
+                            {                    
+
+                                    foreach ($impcliAfip['Periodosactivo'] as $periodoactivo) {                                    
+                                        //si no existe este periodo es por que el impcli no esta abierto
+                                         $agregarImpuesto = false;
+                                    }                              
+                            }
+                            if($agregarImpuesto)
+                            {
+                                $listaAfip[ $impAfip['Impuesto']['id'] ] = $impAfip['Impuesto']['nombre'];        
+                            }                  
+                        }
+                        ?>
+                        <td colspan="3">
+                            <?php 
+                            echo $this->Form->input('impuesto_id', array(
+                                'empty'=>'Seleccionar Impuesto', 
+                                'div' => false ,
+                                'type'=>'select', 
+                                'options'=>$listaAfip
+                                )
+                            );
+                            ?>
+                        </td>
+                        <td>
+                            <?php 
+                            echo $this->Form->input('altaafip', array(
+                                        'class'=>'datepicker-month-year', 
+                                        'type'=>'text',
+                                        'label'=>'Alta', 
+                                        'required'=>true,                                    
+                                        'readonly'=>'readonly')
+                                );
+                            echo $this->Form->input('alta', array(
+                                        'type'=>'hidden',
+                                        )
+                                );
+                            ?>
+                        </td>
+            </td>
                     </tr>                                    
                     <tr>  
                         <td colspan="4"><?php echo $this->Form->input('descripcion', array('label' => 'Descripci&oacuten','style'=>'width:95%'));?></td>
+
                     </tr>
                     <tr>  
                         <td colspan="2"></td>
-                        <td><a href="#close"  onclick="" class="btn_cancelar"> Cancelar </a></td>
+                        <td><a href="#close"  onclick="" class="btn_cancelar" style="margin-top:15px"> Cancelar </a></td>
                         <td ><?php echo $this->Form->end('Agregar');?></td>
                     </tr>
                </table>
@@ -1273,9 +1450,51 @@ if($mostrarView){?>
                 
                 <table cellpadding="0" cellspacing="0" border="0">
                     <tr>
-                        <td colspan="4"><?php echo $this->Form->input('impuesto_id', array('empty'=>'Seleccionar Impuesto', 'type'=>'select', 'options'=>$impuestosdgr));?></td>
+                        <?php
+                        //ya traemos todos los impuestos de dgr junto con los periodos abiertos de cada uno
+                        //asi que si vemos que un impuesto tiene un periodo abiero no tenemos que agregarlo a la variable de esta lista
+                        //hay que armar el array de opciones por que no las tenemos disponibles
+                        $listaDGR = array ();
+                        foreach ($impuestosdgr as $impDgr) {
+                            $agregarImpuesto = true;
+                            foreach ($impDgr['Impcli'] as $impcliDgr) 
+                            {
+                               // if(isset($impcliAfip['PeriodosActivo']))
+                                //{
+                      
+                                    foreach ($impcliDgr['Periodosactivo'] as $periodoactivo) {                                    
+                                        //si no existe este periodo es por que el impcli no esta abierto
+                                         $agregarImpuesto = false;
+                                         //echo "no agregar impuesto".$impAfip['Impuesto']['nombre'];
+                                    }
+                               // }
+                            }
+                            if($agregarImpuesto)
+                            {
+                                $listaDGR[ $impDgr['Impuesto']['id'] ] = $impDgr['Impuesto']['nombre'];        
+                            }                  
+                        }
+                        ?>
+                        <td colspan="3">
+                            <?php echo $this->Form->input('impuesto_id', array('empty'=>'Seleccionar Impuesto', 'type'=>'select', 'options'=>$listaDGR));?>
+                        </td>
+                        <td>
+                            <?php 
+                            echo $this->Form->input('altadgr', array(
+                                        'class'=>'datepicker-month-year', 
+                                        'type'=>'text',
+                                        'label'=>'Alta', 
+                                        'required'=>true,                                    
+                                        'readonly'=>'readonly')
+                                );
+                             echo $this->Form->input('alta', array(
+                                        'type'=>'hidden',
+                                        )
+                                );
+                            ?>
+                        </td>
                     </tr>                   
-                        <td colspan="2"><?php echo $this->Form->input('descripcion', array('label' => 'Descripci&oacute;n'));?></td>
+                        <td colspan="4"><?php echo $this->Form->input('descripcion', array('label' => 'Descripci&oacute;n'));?></td>
                     </tr>
                     <tr>
                         <td colspan="2"></td>
@@ -1306,7 +1525,43 @@ if($mostrarView){?>
                         <?php
                         echo $this->Form->input('cliente_id',array('default'=>$cliente['Cliente']['id'],'type'=>'hidden'));?>
                         <tr>
-                            <td colspan="4"><?php echo $this->Form->input('impuesto_id', array('empty'=>'Seleccionar Impuesto', 'type'=>'select', 'options'=>$impuestosdgrm));?></td>
+                             <?php
+                                //ya traemos todos los impuestos de dgr junto con los periodos abiertos de cada uno
+                                //asi que si vemos que un impuesto tiene un periodo abiero no tenemos que agregarlo a la variable de esta lista
+                                //hay que armar el array de opciones por que no las tenemos disponibles
+                                $listaDGRM = array ();
+                                foreach ($impuestosdgrm as $impDgrm) {
+                                    $agregarImpuesto = true;
+                                    foreach ($impDgrm['Impcli'] as $impcliDgrm) 
+                                    {
+                                            foreach ($impcliDgrm['Periodosactivo'] as $periodoactivo) {                                    
+                                                //si no existe este periodo es por que el impcli no esta abierto
+                                                 $agregarImpuesto = false;
+                                                 //echo "no agregar impuesto".$impAfip['Impuesto']['nombre'];
+                                            }
+                                    }
+                                    if($agregarImpuesto)
+                                    {
+                                        $listaDGRM[ $impDgrm['Impuesto']['id'] ] = $impDgrm['Impuesto']['nombre'];        
+                                    }                  
+                                }
+                                ?>
+                            <td colspan="3"><?php echo $this->Form->input('impuesto_id', array('empty'=>'Seleccionar Impuesto', 'type'=>'select', 'options'=>$listaDGRM));?></td>
+                            <td>
+                            <?php 
+                                echo $this->Form->input('altadgrm', array(
+                                            'class'=>'datepicker-month-year', 
+                                            'type'=>'text',
+                                            'label'=>'Alta', 
+                                            'required'=>true,                                    
+                                            'readonly'=>'readonly')
+                                    );
+                                echo $this->Form->input('alta', array(
+                                        'type'=>'hidden',
+                                        )
+                                );
+                                ?>
+                            </td>
                         </tr>
                         <tr>            
                             <td colspan="2"><?php echo $this->Form->input('descripcion', array('label' => 'Descripci&oacute;n'));?></td>
@@ -1327,201 +1582,145 @@ if($mostrarView){?>
 <a href="#x" class="overlay" id="nuevo_SINDICATO"></a>
 <div id="divSindicato" class="popup">    
     <div id="form_impcliOrganismo_sindicato">
-        <?php if (!empty($impuestossindicato)): 
-        echo $this->Form->create('Impcli',array('controller'=>'Impclis','action'=>'addbancosindicato')); ?>            
-        <h3><?php echo __('Relacionar Sindicato al Cliente'); ?></h3>
-        <table>
-            <?php
-            echo $this->Form->input('cliente_id',array('default'=>$cliente['Cliente']['id'],'type'=>'hidden'));?>
-            <tr>
-                <td><?php echo $this->Form->input('impuesto_id', 
-                                        array('label'=>'Sindicato','empty'=>'Seleccionar Sindicato', 'type'=>'select', 'options'=>$impuestossindicato));?>
+        <?php if (!empty($impuestossindicato)){ 
+            echo $this->Form->create('Impcli',array('controller'=>'Impclis','action'=>'add','id'=>'FormImpcliSindicato')); ?>            
+            <h3><?php echo __('Relacionar Sindicato al Cliente'); ?></h3>
+            <table>
+                <?php
+                echo $this->Form->input('cliente_id',array('default'=>$cliente['Cliente']['id'],'type'=>'hidden'));?>
+                <tr>
+                    <?php
+                    //ya traemos todos los impuestos de dgr junto con los periodos abiertos de cada uno
+                    //asi que si vemos que un impuesto tiene un periodo abiero no tenemos que agregarlo a la variable de esta lista
+                    //hay que armar el array de opciones por que no las tenemos disponibles
+                    $listaSindicato = array ();
+                    foreach ($impuestossindicato as $impSindicato) {
+                        $agregarImpuesto = true;
+                        foreach ($impSindicato['Impcli'] as $impcliSindicato) 
+                        {
+                                foreach ($impcliSindicato['Periodosactivo'] as $periodoactivo) {                                    
+                                    //si no existe este periodo es por que el impcli no esta abierto
+                                     $agregarImpuesto = false;
+                                     //echo "no agregar impuesto".$impAfip['Impuesto']['nombre'];
+                                }
+                        }
+                        if($agregarImpuesto)
+                        {
+                            $listaSindicato[ $impSindicato['Impuesto']['id'] ] = $impSindicato['Impuesto']['nombre'];        
+                        }                  
+                    }
+                    ?>
+                <td colspan="3"><?php echo $this->Form->input('impuesto_id', 
+                                        array('label'=>'Sindicato','empty'=>'Seleccionar Sindicato', 'type'=>'select', 'options'=>$listaSindicato));?>
                 </td>
-                <td> <?php echo $this->Form->input('usuario', array('label'=>'Usuario','size' =>'10', 'default'=>$organizmo['usuario']));?></td>
-                <td><?php echo $this->Form->input('clave', array('label'=>'Clave','default'=>$organizmo['clave'], 'size' =>'10'));?></td> 
-            </tr>
-            <tr>
-                <td colspan="2"><?php echo "Periodo Desde";?></td>
-                <td colspan="2"><?php echo "Periodo Hasta";?></td>
-            </tr>
-            <tr>
-                <td><?php echo $this->Form->input('mesdesdesindicato', array('options' => array(
-                                                            '01'=>'Enero', 
-                                                            '02'=>'Febrero', 
-                                                            '03'=>'Marzo', 
-                                                            '04'=>'Abril', 
-                                                            '05'=>'Mayo', 
-                                                            '06'=>'Junio', 
-                                                            '07'=>'Julio', 
-                                                            '08'=>'Agosto', 
-                                                            '09'=>'Septiembre', 
-                                                            '10'=>'Octubre', 
-                                                            '11'=>'Noviembre', 
-                                                            '12'=>'Diciembre', 
-                                                            ),
-                                                        'empty' => 'Elegir mes',
-                                                        'label'=> 'Mes'
-                                                    )); ?>  </td>
-            
-                <td><?php echo $this->Form->input('aniodesdesindicato', array(
-                                            'options' => array(
-                                                '2014'=>'2014', 
-                                                '2015'=>'2015',     
-                                                ),
-                                            'empty' => 'Elegir',
-                                            'label'=> 'A&ntilde;o'
-
-                                            )
-                                ); ?>                  
-
-                <td><?php echo $this->Form->input('meshastasindicato', array('options' => array(
-                                                            '01'=>'Enero', 
-                                                            '02'=>'Febrero', 
-                                                            '03'=>'Marzo', 
-                                                            '04'=>'Abril', 
-                                                            '05'=>'Mayo', 
-                                                            '06'=>'Junio', 
-                                                            '07'=>'Julio', 
-                                                            '08'=>'Agosto', 
-                                                            '09'=>'Septiembre', 
-                                                            '10'=>'Octubre', 
-                                                            '11'=>'Noviembre', 
-                                                            '12'=>'Diciembre', 
-                                                            ),
-                                                        'empty' => 'Elegir mes',
-                                                        'label'=> 'Mes'
-                                                    )); ?> </td> 
-
-                <td><?php echo $this->Form->input('aniohastasindicato', array(
-                                            'options' => array(
-                                                '2014'=>'2014', 
-                                                '2015'=>'2015',     
-                                                ),
-                                            'empty' => 'Elegir',
-                                            'label'=> 'A&ntilde;o'
-
-                                            )
-                                );  ?>  </td>
-            </tr>
+                <td>
+                <?php 
+                    echo $this->Form->input('altasindicato', array(
+                                'class'=>'datepicker-month-year', 
+                                'type'=>'text',
+                                'label'=>'Alta', 
+                                'required'=>true,                                    
+                                'readonly'=>'readonly')
+                        );
+                    echo $this->Form->input('alta', array(
+                            'type'=>'hidden',
+                            )
+                    );
+                ?>
+                </td>
+            </tr>           
             <tr>            
                 <td colspan="3">
                     <?php echo $this->Form->input('descripcion', array('label' => 'Descripci&oacute;n','style'=>'width:95%'));?>
                 </td>
             </tr>
             <tr>
-                <td></td>
-                <td></td>
-                <td><a href="#close" class="btn_cancelar" >Cancelar</a></td>
-                <td><?php echo $this->Form->end(__('Aceptar')); ?></td> 
+                <td colspan="2"></td>
+                <td > <a href="#close" onclick="" class="btn_cancelar">Cancelar</a></td>
+                <td ><?php echo $this->Form->end('Agregar');?></td>
             </tr>
         </table>
         
+        <?php } else { ?>
+            <h3><?php echo __('Todos los sindicatos han sido agregados'); ?></h3>
     </div>
-        <?php else:?>
-        <h3><?php echo __('Todos los sindicatos han sido agregados'); ?></h3>
+        <?php };?>
+    
+    <a class="close" href="#close"></a>
+</div>
+</div>
+
+<!-- Inicio Popin Nuevo nuevo_Banco -->
+<a href="#x" class="overlay" id="nuevo_Banco"></a>
+<div id="divNuevoBanco" class="popup">    
+    <div id="form_impcliOrganismo_Banco">
+        <?php if (!empty($impuestosbancos)){ 
+                echo $this->Form->create('Impcli',array('controller'=>'Impclis','action'=>'add','id'=>'FormImpcliBanco')); ?>  
+                <h3><?php echo __('Relacionar Banco'); ?></h3>
+                <table>
+                    <?php
+                    echo $this->Form->input('cliente_id',array('default'=>$cliente['Cliente']['id'],'type'=>'hidden'));?>
+                    <tr>
+                        <?php
+                        //ya traemos todos los impuestos de dgr junto con los periodos abiertos de cada uno
+                        //asi que si vemos que un impuesto tiene un periodo abiero no tenemos que agregarlo a la variable de esta lista
+                        //hay que armar el array de opciones por que no las tenemos disponibles
+                        $listaBanco = array ();
+                        foreach ($impuestosbancos as $impBanco) {
+                            $agregarImpuesto = true;
+                            foreach ($impBanco['Impcli'] as $impcliBanco) 
+                            {
+                                    foreach ($impcliBanco['Periodosactivo'] as $periodoactivo) {                                    
+                                        //si no existe este periodo es por que el impcli no esta abierto
+                                         $agregarImpuesto = false;
+                                         //echo "no agregar impuesto".$impAfip['Impuesto']['nombre'];
+                                    }
+                            }
+                            if($agregarImpuesto)
+                            {
+                                $listaBanco[ $impBanco['Impuesto']['id'] ] = $impBanco['Impuesto']['nombre'];        
+                            }                  
+                        }
+                        ?>
+                        <td colspan="3"><?php echo $this->Form->input('impuesto_id', 
+                                                array('label'=>'Banco','empty'=>'Seleccionar Banco', 'type'=>'select', 'options'=>$listaBanco));?>
+                        </td>
+                        <td>
+                        <?php 
+                            echo $this->Form->input('altabanco', array(
+                                        'class'=>'datepicker-month-year', 
+                                        'type'=>'text',
+                                        'label'=>'Alta', 
+                                        'required'=>true,                                    
+                                        'readonly'=>'readonly')
+                                );
+                            echo $this->Form->input('alta', array(
+                                    'type'=>'hidden',
+                                    )
+                            );
+                        ?>
+                        </td>
+                    </tr>           
+                    <tr>            
+                        <td colspan="3">
+                            <?php echo $this->Form->input('descripcion', array('label' => 'Descripci&oacute;n','style'=>'width:95%'));?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td > <a href="#close" onclick="" class="btn_cancelar">Cancelar</a></td>
+                        <td ><?php echo $this->Form->end('Agregar');?></td>
+                    </tr>
+                </table>
+        
+        <?php } else { ?>
+        <h3><?php echo __('Todos los banco han sido agregados'); ?></h3>
     </div>
-        <?php endif;?>
+        <?php };?>
     
     <a class="close" href="#close"></a>
 </div>
 
- <!-- Inicio Popin Nuevo Banco -->
-<a href="#x" class="overlay" id="nuevo_Banco"></a>
-<div id="divNuevoBanco" class="popup" style="width:38%;">        
-        <div id="form_impcliOrganismo_Banco">
-        <?php if (!empty($impuestosbancos)): ?>    
-            <?php 
-                echo $this->Form->create('Impcli',array('controller'=>'Impclis','action'=>'addbancosindicato')); ?>                
-                <h3><?php echo __('Relacionar Banco'); ?></h3>
-                <?php
-                    echo $this->Form->input('cliente_id',array('default'=>$cliente['Cliente']['id'],'type'=>'hidden'));?>
-                    <table cellpadding="0" cellspacing="0" border="0">
-                    <tr>
-                        <td colspan="2"><?php echo $this->Form->input('impuesto_id', array('label'=>'Sindicato','empty'=>'Seleccionar Banco', 'div' => false ,'type'=>'select', 'options'=>$impuestosbancos));?></td>
-                        <td> <?php echo $this->Form->input('usuario', array('label'=>'Usuario','size' =>'10', 'default'=>$organizmo['usuario']));?></td>
-                        <td><?php echo $this->Form->input('clave', array('label'=>'Clave','default'=>$organizmo['clave'], 'size' =>'10'));?></td> 
-                    </tr>
-
-                    <tr>
-                        <td colspan="2"><?php echo "Periodo Desde";?></td>
-                        <td colspan="2"><?php echo "Periodo Hasta";  ?></td> 
-                    </tr>
-                    <tr>
-                        <td><?php echo $this->Form->input('mesdesde', array('options' => array(
-                                                                    '01'=>'Enero', 
-                                                                    '02'=>'Febrero', 
-                                                                    '03'=>'Marzo', 
-                                                                    '04'=>'Abril', 
-                                                                    '05'=>'Mayo', 
-                                                                    '06'=>'Junio', 
-                                                                    '07'=>'Julio', 
-                                                                    '08'=>'Agosto', 
-                                                                    '09'=>'Septiembre', 
-                                                                    '10'=>'Octubre', 
-                                                                    '11'=>'Noviembre', 
-                                                                    '12'=>'Diciembre', 
-                                                                    ),
-                                                                'empty' => 'Elegir mes',
-                                                                'label'=> 'Mes',
-                                                                'div' => false
-                                                            ));  ?></td> 
-                    
-                        <td><?php echo $this->Form->input('aniodesde', array(
-                                                    'options' => array(
-                                                        '2014'=>'2014', 
-                                                        '2015'=>'2015',     
-                                                        ),
-                                                    'empty' => 'Elegir',
-                                                    'label'=> 'A&ntilde;o'
-    
-                                                    ));?></td>  
- 
-                                             
-                        <td><?php echo $this->Form->input('meshasta', array('options' => array(
-                                                                    '01'=>'Enero', 
-                                                                    '02'=>'Febrero', 
-                                                                    '03'=>'Marzo', 
-                                                                    '04'=>'Abril', 
-                                                                    '05'=>'Mayo', 
-                                                                    '06'=>'Junio', 
-                                                                    '07'=>'Julio', 
-                                                                    '08'=>'Agosto', 
-                                                                    '09'=>'Septiembre', 
-                                                                    '10'=>'Octubre', 
-                                                                    '11'=>'Noviembre', 
-                                                                    '12'=>'Diciembre', 
-                                                                    ),
-                                                                'empty' => 'Elegir mes',
-                                                                'label'=> 'Mes'
-                                                            )); ?>  </td>  
-
-                        <td><?php echo $this->Form->input('aniohasta', array(
-                                                    'options' => array(
-                                                        '2014'=>'2014', 
-                                                        '2015'=>'2015',     
-                                                        ),
-                                                    'empty' => 'Elegir',
-                                                    'label'=> 'A&ntilde;o'
-    
-                                                    )
-                                        ); ?> </td>    
-                    </tr>
-                    <tr>  
-                        <td colspan="2"><?php echo $this->Form->input('descripcion', array('label' => 'Descripci&oacuten'));?></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"><a href="#close"  onclick="" class="btn_cancelar"> Cancelar </a></td>
-                        <td ><?php echo $this->Form->end('Agregar');?></td>
-                    </tr>
-               </table>
-        </div>
-        <?php else:?>
-                <h3><?php echo __('Todos los bancos han sido agregados'); ?></h3>
-        <?php endif?>                    
-         <a class="close" href="#close"></a>
-</div>
-   
-</div>
 
 
 <!-- Inicio Popin Nuevo SubCliente -->

@@ -58,6 +58,7 @@ class PeriodosactivosController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->autoRender=false; 
 		if ($this->request->is('post')) {
 			$this->Periodosactivo->create();
 			if ($this->Periodosactivo->save($this->request->data)) {

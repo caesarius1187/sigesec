@@ -26,7 +26,6 @@ class Tareasxclientesxestudio extends AppModel {
  *
  * @var array
  */
-
 	public $belongsTo = array(
 		'Tareascliente' => array(
 			'className' => 'Tareascliente',
@@ -50,7 +49,9 @@ class Tareasxclientesxestudio extends AppModel {
 			'order' => ''
 		)
 	);
+
 	public function isOwnedBy($post, $user) {
 	    return $this->field('id', array('id' => $post, 'user_id' => $user)) !== false;
 	}
+
 }

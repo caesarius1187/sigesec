@@ -48,17 +48,20 @@ class PersonasrelacionadasController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Personasrelacionada->create();
-			$this->request->data('Personasrelacionada.vtomandato',date('Y-m-d',strtotime($this->request->data['Personasrelacionada']['vtomandato'])));
 			if ($this->Personasrelacionada->save($this->request->data)) {
-				$this->Session->setFlash(__('La Persona Relacionada ha sido Guardada.'));
-				return $this->redirect(array('controller'=>'clientes','action' => 'view',$this->request->data['Personasrelacionada']['cliente_id']));
+				$id = $this->Personasrelacionada->getLastInsertID();
+				$options = array('conditions' => array('Personasrelacionada.' . $this->Personasrelacionada->primaryKey => $id));
+				$this->set('persona', $this->Personasrelacionada->find('first', $options));
 			} else {
-				$this->Session->setFlash(__('La Persona Relacionada no ha sido Guardada. Por favor intente de nuevo mas tarde'));
+				$this->set('respuesta','La Persona Relacionada no ha sido Guardada. Por favor intente de nuevo mas tarde.');	
 			}
 		}
 		$clientes = $this->Personasrelacionada->Cliente->find('list');
 		$localidades = $this->Personasrelacionada->Localidade->find('list');
 		$this->set(compact('clientes', 'localidades'));
+
+		$this->layout = 'ajax';
+		$this->render('add');	
 	}
 
 /**
@@ -73,12 +76,11 @@ class PersonasrelacionadasController extends AppController {
 			throw new NotFoundException(__('Invalid personasrelacionada'));
 		}
 		if ($this->request->is('post')) {
-			$this->request->data('Personasrelacionada.vtomandato',date('Y-m-d',strtotime($this->request->data['Personasrelacionada']['vtomandatoedit'])));
 			if ($this->Personasrelacionada->save($this->request->data)) {
-				$this->Session->setFlash(__('La Persona Relacionada ha sido Modificada.'));
-				return $this->redirect(array('controller'=>'clientes','action' => 'view',$this->request->data['Personasrelacionada']['cliente_id']));
+				$options = array('conditions' => array('Personasrelacionada.' . $this->Personasrelacionada->primaryKey => $id));
+				$this->set('persona', $this->Personasrelacionada->find('first', $options));
 			} else {
-				$this->Session->setFlash(__('La Persona Relacionada no ha sido Modificada. Por favor intente de nuevo mas tarde'));
+				$this->set('respuesta','La Persona Relacionada no ha sido Guardada. Por favor intente de nuevo mas tarde.');	
 			}
 		} else {
 			$options = array('conditions' => array('Personasrelacionada.' . $this->Personasrelacionada->primaryKey => $id));
@@ -87,6 +89,9 @@ class PersonasrelacionadasController extends AppController {
 		$clientes = $this->Personasrelacionada->Cliente->find('list');
 		$localidades = $this->Personasrelacionada->Localidade->find('list');
 		$this->set(compact('clientes', 'localidades'));
+
+		$this->layout = 'ajax';
+		$this->render('add');
 	}
 	public function editajax(
 				$id=null,$cliid = null) {
@@ -126,16 +131,19 @@ class PersonasrelacionadasController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $cliid=null) {
 		$this->Personasrelacionada->id = $id;
 		if (!$this->Personasrelacionada->exists()) {
 			throw new NotFoundException(__('Invalid personasrelacionada'));
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Personasrelacionada->delete()) {
-			$this->Session->setFlash(__('The personasrelacionada has been deleted.'));
+			$this->Session->setFlash(__('La persona relacionada ha sido eliminada'));
 		} else {
-			$this->Session->setFlash(__('The personasrelacionada could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('La persona relacionada NO ha sido eliminada. Por favor intentelo mas tarde'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		return $this->redirect(array(
+			'controller'=>'clientes',
+			'action' => 'view',
+			$cliid));
 	}}

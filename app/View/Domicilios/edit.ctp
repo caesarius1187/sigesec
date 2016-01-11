@@ -1,3 +1,31 @@
+<?php 
+if(!$mostrarFormulario){ ?>      
+    <td><?php echo h($domicilio['Domicilio']['calle'].' '.$domicilio['Domicilio']['numero']); ?></td> 
+    <td><?php echo h($domicilio['Localidade']['Partido']['nombre']); ?></td>
+    <td><?php echo h($domicilio['Localidade']['nombre']); ?></td> 
+    <td class="">
+        <a href="#"  onclick="loadFormDomicilio(<?php echo$domicilio['Domicilio']['id']; ?>,<?php echo $domicilio['Domicilio']['cliente_id'];?>)" class="button_view"> 
+         <?php echo $this->Html->image('edit_view.png', array('alt' => 'open','class'=>'imgedit'));?>
+        </a> 
+        <?php echo $this->Form->postLink(
+                     $this->Html->image('ic_delete_black_24dp.png', array(
+                        'alt' => 'Eliminar',
+                    )),
+                    array(
+                        'controller' => 'Domicilios',
+                        'action' => 'delete',
+                        $domicilio['Domicilio']['id'],
+                        $domicilio['Domicilio']['cliente_id']
+                    ),
+                    array(
+                        'escape' => false // Add this to avoid Cake from printing the img HTML code instead of the actual image
+                    ),
+                    __('Esta seguro que quiere eliminar este domicilio?')                                    
+            ); ?>
+    </td>      
+<?php
+}else{
+?>
 <?php echo $this->Form->create('Domicilio',array('action' => 'edit', )); ?>
 	<?php
 		 echo $this->Form->input('id');
@@ -5,68 +33,23 @@
 	?>
 	<h3><?php echo __('Editar Domicilio'); ?></h3>
     <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-            <!--<td><?php  echo $this->Form->input('tipo', array('label'=>'Tipo'));?></td>   
-            <td><?php echo $this->Form->input('sede', array('label'=>'Sede'));?></td>  
-            <td><?php echo $this->Form->input('nombrefantasia', array('label'=>'Nombre fantas&iacute;a'));?></td>  -->
-        </tr>
         <tr>  
-            <td colspan="4">
-                <table>
-                    <tr>
-                        <td style="width: 150px;"><?php  echo $this->Form->input('tipo', array('label'=>'Tipo','type'=>'select','options'=>array('comercial'=>'Comercial','fiscal'=>'Fiscal','personal'=>'Personal','laboral'=>'Laboral'),'default'=>$this->request->data['Domicilio']['tipo']));?></td> 
-                        <?php //<td>echo $this->Form->input('puntodeventa', array('label'=>'Pto. Vta.', 'size' => '4'));</td>?>
-                        <td><?php echo $this->Form->input('fechainicio', array(
-                                            'class'=>'datepicker', 
-                                            'value'=>date('d-m-Y',strtotime($this->request->data['Domicilio']['fechainicio'])),
-                                            'type'=>'text',
-                                            'size'=>'10',
-                                            'label'=>'Fecha de Inicio',                                    
-                                            'readonly'=>'readonly')
-                             );?></td>
-                        <td></td> 
-                    </tr>
-                </table>             
-            </td>            
-        </tr>
-        <tr>    
-
-        </tr>
-            <td><?php echo $this->Form->input('partido_id', array('label'=>'Provincia','onChange'=>'getLocalidades()','default'=>$this->request->data['Localidade']['partido_id']));?></td>
+            <td style="width: 150px;"><?php  echo $this->Form->input('tipo', array('label'=>'Tipo','type'=>'select','options'=>array('comercial'=>'Comercial','fiscal'=>'Fiscal','personal'=>'Personal','laboral'=>'Laboral'),'default'=>$this->request->data['Domicilio']['tipo']));?>
+            <td><?php echo $this->Form->input('partido_id', array('label'=>'Provincia','onChange'=>'getLocalidades("DomicilioEditForm","DomicilioPartidoId","DomicilioLocalidadeId")','default'=>$this->request->data['Localidade']['partido_id']));?></td>
             <td><?php echo $this->Form->input('localidade_id', array('label'=>'Localidad'));?></td>
-            <td>&nbsp;</td>           
+            <td><?php echo $this->Form->input('codigopostal', array('label'=>'C&oacute;d. Postal', 'size' => '3'));?></td>            
         <tr>
-            <td><?php echo $this->Form->input('calle', array('label'=>'Calle'));?></td> 
-            <td colspan="2" style="padding:0px;">
-                <table style="margin:0px; padding:0px;" cellpadding="0" cellspacing="0" border="0"> 
-                <tr> 
-                    <td><?php echo $this->Form->input('numero', array('label'=>'Nº', 'size' => '6'));?></td>
-                    <td><?php echo $this->Form->input('piso', array('label'=>'Piso', 'size' => '3'));?></td>    
-                    <td><?php echo $this->Form->input('ofidepto', array('label'=>'Of./Dpto.', 'size' => '3'));?></td>                   
-                    <td><?php echo $this->Form->input('ruta', array('label'=>'Ruta', 'size' => '8'));?></td>    
-                    <td><?php echo $this->Form->input('kilometro', array('label'=>'Km.', 'size' => '3'));?></td>
-                    <td><?php echo $this->Form->input('torre', array('label'=>'Torre', 'size' => '3'));?></td>   
-                    <td><?php echo $this->Form->input('manzana', array('label'=>'Manzana', 'size' => '3'));?></td>
-                </tr>
-                </table>
-            </td>
+            <td colspan="5"><?php echo $this->Form->input('calle', array('label'=>'Domicilio','style'=>'width:95%'));?></td> 
          </tr>
-         <tr>
-            <td><?php echo $this->Form->input('entrecalles', array('label'=>'Entre calles'));?></td>    
-            <td><?php echo $this->Form->input('codigopostal', array('label'=>'C&oacute;d. Postal', 'size' => '3'));?></td>
-            <td>&nbsp;</td>
-         </tr>
-         <tr> 
-             <td><?php echo $this->Form->input('telefono', array('label'=>'Tel&eacute;fono', 'size' => '11'));?></td>  
-             <td><?php echo $this->Form->input('movil', array('label'=>'M&oacute;vil', 'size' => '11'));?></td>
-             <td><?php echo $this->Form->input('fax', array('label'=>'Fax', 'size' => '11'));?></td>     
-         </tr>
-         <tr> 
-            <td><?php echo $this->Form->input('email',array('label'=>'E-mail'));?></td>
-            <td><?php echo $this->Form->input('personacontacto', array('label'=>'Persona contacto'));?></td>  
-            <td><?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'size' => '35'));?></td>    
-         </tr>    
-            </table>
-	</fieldset>
-<?php echo $this->Form->end(__('Modificar')); ?>
-
+        <tr>
+            <td colspan="5"><?php echo $this->Form->input('observaciones', array('label'=>'Observaciones','style'=>'width:95%', 'size' => '35'));?></td>    
+        </tr>    
+        <tr> 
+            <td></td>    
+            <td></td>    
+            <td>
+                <?php echo $this->Form->end(__('Modificar')); ?>
+            </td>    
+        </tr> 
+    </table>	
+<?php } ?>

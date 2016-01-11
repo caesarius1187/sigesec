@@ -46,17 +46,63 @@ class HonorariosController extends AppController {
  * @return void
  */
 	public function add() {
+		$resp ="";
+		$this->autoRender=false; 
 		if ($this->request->is('post')) {
+
+			$this->request->data('Honorario.fecha',date('Y-m-d',strtotime($this->request->data['Honorario']['fecha'])));				
+
 			$this->Honorario->create();
-			if ($this->Honorario->save($this->request->data)) {
-				$this->Session->setFlash(__('The honorario has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The honorario could not be saved. Please, try again.'));
+			$id = 0;
+			$options = array(
+					'conditions' => array(
+						'Honorario.id'=> $this->request->data['Honorario']['id'],
+						)
+					);
+			$createdHono = $this->Honorario->find('first', $options);
+			$honoCreado= false;
+			
+			if(count($createdHono)>0){
+				//el impcli ya esta creado por lo que ahora resta buscar los periodos activos y ver si se puede crear uno
+				$honoCreado= true;
+				$this->set('honoCreado','Error1: El honorario ya esta relacionado.');	
+				$id = $createdHono['Honorario']['id'];
+				$this->set('ruta','honorario ya creado');
+			}else{
+				unset($this->request->data['Honorario']['id']);
+				$this->set('ruta','honorario NO creado');
+				
 			}
-		}
-		$clientes = $this->Honorario->Cliente->find('list');
-		$this->set(compact('clientes'));
+			if ($this->Honorario->save($this->request->data)) {
+					if(!$honoCreado){
+						$id = $this->Honorario->getLastInsertID();
+					}
+					$options = array(
+						'conditions' => array(
+							'Honorario.' . $this->Honorario->primaryKey => $id
+							)
+						);
+					$createdHono = $this->Honorario->find('first', $options);	
+					$this->set('honorario',$createdHono);
+					$this->autoRender=false; 		
+					$this->layout = 'ajax';
+					$this->render('add');		
+					return;									
+				}
+				else {
+					$this->set('respuesta','Error: NO se creo el honorario. Intente de nuevo.');	
+					$this->autoRender=false; 
+					$this->layout = 'ajax';
+					$this->render('add');
+					return;
+				}
+		}	else {
+			$this->set('respuesta','Error: NO se creo el honorario. Intente de nuevo. (500)');	
+			$this->autoRender=false; 
+			$this->layout = 'ajax';
+			$this->render('add');
+			return;
+		}		
 	}
 	public function addajax($cliid = null,$fecha = null,$monto= null,$periodo= null,$desc= null) {
 	 	$this->request->onlyAllow('ajax');

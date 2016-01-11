@@ -1,52 +1,198 @@
+$(document).ready(function() {
+    var $table = $('#tbl_tareas');
+    $table.floatThead();
+
+    $( "input.datepicker" ).datepicker({
+      yearRange: "-100:+50",
+      changeMonth: true,
+      changeYear: true,
+      constrainInput: false,
+      showOn: 'both',
+      buttonImage: "",
+      dateFormat: 'dd-mm-yy',
+      buttonImageOnly: true
+    });
+    
+    $( "#clientesLclis" ).change(function(){
+      $("#clientesGclis option:selected").removeAttr("selected");
+      $("#clientesSelectby").val("clientes");       
+    });
+    $( "#clientesGclis" ).change(function(){
+      $("#clientesLclis option:selected").removeAttr("selected");
+      $("#clientesSelectby").val("grupos");
+    });
+    $('#formAddHonoraio').submit(function(){ 
+      //serialize form data 
+      var formData = $(this).serialize(); 
+      //get form action 
+      var formUrl = $(this).attr('action'); 
+      $.ajax({ 
+        type: 'POST', 
+        url: formUrl, 
+        data: formData, 
+        success: function(data,textStatus,xhr){ 
+          //callAlertPopint(data); 
+
+          var mirespuesta =jQuery.parseJSON(data);
+          if(mirespuesta.hasOwnProperty('respuesta')){
+            location.hash ="#x";                
+            callAlertPopint(mirespuesta.respuesta);
+            return false;
+          }
+
+          var cliid = mirespuesta.honorario.cliente_id;
+
+          var cellid ="cell"+cliid+'-'+"tarea1"; 
+
+          var eventoid =  $('#formAddHonoraio #HonorarioEventoId').val();
+          var periodo = $('#formAddHonoraio #HonorarioPeriodo').val();
+          var clinombre = $('#formAddHonoraio #HonorarioClientenombre').val();
+          var honoid = mirespuesta.honorario.id;
+          var honomonto = mirespuesta.honorario.monto;
+          var honofecha = mirespuesta.honorario.fecha;
+          var descripcion = mirespuesta.honorario.descripcion;
+          var js = eventoid+",'tarea1','"+periodo+"','"+cliid+"','"+clinombre+"','realizado','"+honoid+"','"+honomonto+"','"+honofecha+"','"+descripcion+"'";
+          js = "verFormSolicitar("+js+")";
+          // create a function from the "js" string
+          var newclick = new Function(js);
+
+          // clears onclick then sets click using jQuery
+          $("#"+cellid).attr('onclick', '').click(newclick);
+          location.href="#close";
+          return false;
+        }, 
+        error: function(xhr,textStatus,error){ 
+          callAlertPopint(textStatus); 
+          return false;
+        } 
+      }); 
+          return false;
+    }); 
+    $('#formAddDeposito').submit(function(){ 
+      //serialize form data 
+      var formData = $(this).serialize(); 
+      //get form action 
+      var formUrl = $(this).attr('action'); 
+      $.ajax({ 
+        type: 'POST', 
+        url: formUrl, 
+        data: formData, 
+        success: function(data,textStatus,xhr){ 
+          //callAlertPopint(data); 
+
+          var mirespuesta =jQuery.parseJSON(data);
+          if(mirespuesta.hasOwnProperty('respuesta')){
+                    location.hash ="#x";                
+            callAlertPopint(mirespuesta.respuesta);
+          }
+
+          var cliid = mirespuesta.deposito.cliente_id;
+
+          var cellid ="cell"+cliid+'-'+"tarea14"; 
+
+          var eventoid =  $('#formAddDeposito #DepositoEventoId').val();
+          var periodo = $('#formAddDeposito #DepositoPeriodo').val();
+          var clinombre = $('#formAddDeposito #DepositoClientenombre').val();
+          var depoid = mirespuesta.deposito.id;
+          var depomonto = mirespuesta.deposito.monto;
+          var depofecha = mirespuesta.deposito.fecha;
+          var descripcion = mirespuesta.deposito.descripcion;
+          var js = eventoid+",'tarea14','"+periodo+"','"+cliid+"','"+clinombre+"','realizado','"+depoid+"','"+depomonto+"','"+depofecha+"','"+descripcion+"'";
+          js = "verFormInformar("+js+")";
+          // create a function from the "js" string
+          var newclick = new Function(js);
+
+          // clears onclick then sets click using jQuery
+          $("#"+cellid).attr('onclick', '').click(newclick);
+          location.href="#close";
+          return false;
+        }, 
+        error: function(xhr,textStatus,error){ 
+          callAlertPopint(textStatus); 
+          return false;
+        } 
+      }); 
+          return false;
+    }); 
+});
 function noHabilitado(){
-  alert('Usted no posee permisos para realizar esta tarea. En la seccion Parametros/Tareas podra habilitar la tarea.');
+  callAlertPopint('Usted no posee permisos para realizar esta tarea. En la seccion Parametros/Tareas podra habilitar la tarea.');
+}
+function verFormSolicitar(eventId,tarea,periodo,clienteid,clientenombre,estadotarea,honoid,honomonto,honofecha,descripcion){
+  
+  $('#formAddHonoraio #HonorarioId').val(honoid);
+  $('#formAddHonoraio #HonorarioClienteId').val(clienteid);
+  $('#formAddHonoraio #HonorarioEventoId').val(eventId);
+
+  $('#formAddHonoraio #HonorarioPeriodo').val(periodo);
+  $('#formAddHonoraio #HonorarioMonto').val(honomonto);
+  $('#formAddHonoraio #HonorarioFecha').val(honofecha);
+  $('#formAddHonoraio #HonorarioClientenombre').val(clientenombre);
+  $('#formAddHonoraio #HonorarioDescripcion').val(descripcion);
+  
+  location.href="#popInSolicitar";
+
+}
+function verFormInformar(eventId,tarea,periodo,clienteid,clientenombre,estadotarea,depoid,depomonto,depofecha,descripcion){
+  
+  $('#formAddDeposito #DepositoId').val(depoid);
+  $('#formAddDeposito #DepositoClienteId').val(clienteid);
+  $('#formAddDeposito #DepositoEventoId').val(eventId);
+
+  $('#formAddDeposito #DepositoPeriodo').val(periodo);
+  $('#formAddDeposito #DepositoMonto').val(depomonto);
+  $('#formAddDeposito #DepositoFecha').val(depofecha);
+  $('#formAddDeposito #DepositoClientenombre').val(clientenombre);
+  $('#formAddDeposito #DepositoDescripcion').val(descripcion);
+  
+  location.href="#popInInformar";
+
 }
 function realizarEventoCliente(eventId,tarea,periodo,clienteid,estadotarea){
 
-       var datas =  eventId+"/"+tarea+"/"+periodo+"/"+clienteid;
-       var data ="";
-       $.ajax({
-             type: "post",  // Request method: post, get
-             url: serverLayoutURL+"/eventosclientes/realizareventocliente/"+eventId+"/"+tarea+"/"+periodo+"/"+clienteid+"/"+estadotarea, // URL to request
-             data: data,  // post data
-             success: function(response) {
-             					
-                      var resp = response.split("&&");
-                            var respuesta=resp[1];
-                            var error=resp[0];
+   var datas =  eventId+"/"+tarea+"/"+periodo+"/"+clienteid;
+   var data ="";
+   $.ajax({
+         type: "post",  // Request method: post, get
+         url: serverLayoutURL+"/eventosclientes/realizareventocliente/"+eventId+"/"+tarea+"/"+periodo+"/"+clienteid+"/"+estadotarea, // URL to request
+         data: data,  // post data
+         success: function(response) {
+                  
+                  var resp = response.split("&&");
+                        var respuesta=resp[1];
+                        var error=resp[0];
 
-                          if(error!=0){
-                            alert('Error por favor intente mas tarde');
-                            //alert(respuesta);
-                            return;
-                          }else{
-                            var newtd="";
-                            var idCell='#cell'+clienteid+'-'+tarea;
-                            var myparams="";
-                            if(estadotarea=='pendiente'){
-                              myparams= eventId+",'"+tarea+"','"+periodo+"','"+clienteid+"','realizado'";      
-                              newtd+='<img src="/sigesec/img/add.png" onclick="realizarEventoCliente('+myparams+')" height="20" width="20"> ';                           
-                                                       
-                              $(idCell).attr("class", "pendiente");   
-                            }else{
-                              myparams= eventId+",'"+tarea+"','"+periodo+"','"+clienteid+"','pendiente'";   
-                              newtd+='<img src="/sigesec/img/edit.png" onclick="realizarEventoCliente('+myparams+')" height="20" width="20"> ';                           
-                            
-                              $(idCell).attr("class", "realizado");  
-                            }
-                             
-                              $(idCell).html(newtd);
-                              alert('Tarea modificada. Estado:'+estadotarea);
-                          }                                                                                              
-                         },             					             					      				             				
-	           error:function (XMLHttpRequest, textStatus, errorThrown) {
-	             alert(textStatus);
-	    		 	   alert(XMLHttpRequest);
-	    		 	   alert(errorThrown);
-	           }
-          });
-          return false;
-	
+                      if(error!=0){
+                        callAlertPopint('Error por favor intente mas tarde');
+                        //alert(respuesta);
+                        return;
+                      }else{
+                        var newtd="";
+                        var idCell='#cell'+clienteid+'-'+tarea;
+                        var myparams="";
+                        if(estadotarea=='pendiente'){
+                          myparams= eventId+",'"+tarea+"','"+periodo+"','"+clienteid+"','realizado'";      
+                          newtd+='<img src="'+serverLayoutURL+'/img/add.png" onclick="realizarEventoCliente('+myparams+')" height="20" width="20"> ';                           
+                                                   
+                          $(idCell).attr("class", "pendiente");   
+                        }else{
+                          myparams= eventId+",'"+tarea+"','"+periodo+"','"+clienteid+"','pendiente'";   
+                          newtd+='<img src="'+serverLayoutURL+'/img/edit.png" onclick="realizarEventoCliente('+myparams+')" height="20" width="20"> ';                           
+                        
+                          $(idCell).attr("class", "realizado");  
+                        }
+                         
+                          $(idCell).html(newtd);
+                          callAlertPopint('Tarea modificada. Estado:'+estadotarea);
+                      }                                                                                              
+                     },                                                                               
+         error:function (XMLHttpRequest, textStatus, errorThrown) {
+           alert(textStatus);
+           alert(XMLHttpRequest);
+           alert(errorThrown);
+         }
+      });
+      return false;
 }
 function realizarEventoImpuesto(eventId,tarea,periodo,clienteid,impcliid,estadotarea){
 
@@ -57,13 +203,12 @@ function realizarEventoImpuesto(eventId,tarea,periodo,clienteid,impcliid,estadot
              url: serverLayoutURL+"/eventosimpuestos/realizareventoimpuesto/"+eventId+"/"+tarea+"/"+periodo+"/"+impcliid+"/"+estadotarea, // URL to request
              data: data,  // post data
              success: function(response) {
-                 					 var resp = response.split("&&");
+                           var resp = response.split("&&");
                             var respuesta=resp[1];
                             var error=resp[0];
 
                           if(error!=0){
-                            alert('Error por favor intente mas tarde');
-                            alert(respuesta);
+                            callAlertPopint('Error por favor intente mas tarde');
                             return;
                           }else{
                             var newtd="";
@@ -71,28 +216,28 @@ function realizarEventoImpuesto(eventId,tarea,periodo,clienteid,impcliid,estadot
                             var myparams="";
                             if(estadotarea=='pendiente'){
                               myparams= eventId+",'"+tarea+"','"+periodo+"','"+clienteid+"','"+impcliid+"','realizado'";      
-                              newtd+='<img src="/sigesec/img/add.png" onclick="realizarEventoImpuesto('+myparams+')" height="20" width="20"> ';                           
+                              newtd+='<img src="'+serverLayoutURL+'/img/add.png" onclick="realizarEventoImpuesto('+myparams+')" height="20" width="20"> ';                           
                                                        
                               $(idCell).attr("class", "pendiente");   
                             }else{
                               myparams= eventId+",'"+tarea+"','"+periodo+"','"+clienteid+"','"+impcliid+"','pendiente'";   
-                              newtd+='<img src="/sigesec/img/edit.png" onclick="realizarEventoImpuesto('+myparams+')" height="20" width="20"> ';                           
+                              newtd+='<img src="'+serverLayoutURL+'/img/edit.png" onclick="realizarEventoImpuesto('+myparams+')" height="20" width="20"> ';                           
                             
                               $(idCell).attr("class", "realizado");  
                             }
                              
                               $(idCell).html(newtd);
-                              alert('Tarea modificada. Estado:'+estadotarea);
+                              callAlertPopint('Tarea modificada. Estado:'+estadotarea);
                           }                                                                                              
                          },
-	           error:function (XMLHttpRequest, textStatus, errorThrown) {
-	                  alert(textStatus);
-        	    		 	alert(XMLHttpRequest);
-        	    		 	alert(errorThrown);
+             error:function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                    alert(XMLHttpRequest);
+                    alert(errorThrown);
              }
           });
           return false;
-	
+  
 }
 function showPrepararPapeles(eventId,tarea,periodo,clienteid,impcliid){
   $('#form_prepararPapeles #clienteid').val(clienteid)
@@ -123,6 +268,18 @@ function papelesDeTrabajo(periodo,impcli){
              success: function(response) {
                       //alert(response);
                       $('#divpopPapelesDeTrabajo').html(response);
+                       $(document).ready(function() {
+                            $( "input.datepicker" ).datepicker({
+                              yearRange: "-100:+50",
+                              changeMonth: true,
+                              changeYear: true,
+                              constrainInput: false,
+                              showOn: 'both',
+                              buttonImage: "",
+                              dateFormat: 'dd-mm-yy',
+                              buttonImageOnly: true
+                            });
+                        });
                       location.href='#popInPapelesDeTrabajo';
                            },
              error:function (XMLHttpRequest, textStatus, errorThrown) {
@@ -133,72 +290,79 @@ function papelesDeTrabajo(periodo,impcli){
           });
           return false;
 }
-
-function agregarPapeldeTrabajo(){
-    clienteid = $('#form_prepararPapeles #EventosimpuestoClienteid').val();
-    id=0;
-    eventId = $('#form_prepararPapeles #EventosimpuestoEventoId').val();
-    eventId2= $('#form_prepararPapeles #EventosimpuestoId').val();
-    periodo = $('#periodoSel').val();
-    impcliid = $('#form_prepararPapeles #EventosimpuestoImpcliid').val();
-
-    montovto = $('#form_prepararPapeles #EventosimpuestoMontovto').val();
-    fchvto = $('#form_prepararPapeles #EventosimpuestoFchvto').val();
-    monc = $('#form_prepararPapeles #EventosimpuestoMonc').val();
-    descripcion = $('#form_prepararPapeles #EventosimpuestoDescripcion').val();
-
-    error="";
-    if(monc==""){
-      error+="Debe cargar monto/n";
-    }
-    if(fchvto==""){
-      error+="Debe cargar Fecha de Vencimiento/n";
-    }
-    if(eventId!=""){
-      id=eventId;
-    }
-    if(eventId2!=""){
-      id=eventId2;
-    }
-   if(error==""){
-
-     var datas =  eventId2+"/"+periodo+"/"+impcliid+"/"+montovto+"/"+fchvto+"/"+monc+"/"+descripcion;
-     var data ="";
-     $.ajax({
-           type: "post",  // Request method: post, get
-           url: serverLayoutURL+"/eventosimpuestos/realizartarea5/"+id+"/"+periodo+"/"+impcliid+"/"+montovto+"/"+fchvto+"/"+monc+"/"+descripcion, // URL to request
-           data: data,  // post data
-           success: function(response) {
-                        var resp = response.split("&&");
-                        var respuesta=resp[1];
-                        var error=resp[0];
-
-                        alert(response);
-                        alert(respuesta);                                             
-                   },
-           error:function (XMLHttpRequest, textStatus, errorThrown) {
-                  alert(textStatus);
-                  alert(XMLHttpRequest);
-                  alert(errorThrown);
-          }
-        });
-        return false;    
-      }else{
-        alert(error);
-        return false;    
-
+function solicitar(){
+  $.ajax({
+       type: "post",  // Request method: post, get
+       url: serverLayoutURL+"/eventosimpuestos/realizartarea5/"+id+"/"+periodo+"/"+impcliid+"/"+montovto+"/"+fchvto+"/"+monc+"/"+descripcion, // URL to request
+       data: data,  // post data
+       success: function(response) {
+                    var resp = response.split("&&");
+                    var respuesta=resp[1];
+                    var error=resp[0];
+                   
+                    callAlertPopint(respuesta); 
+               },
+       error:function (XMLHttpRequest, textStatus, errorThrown) {
+              alert(textStatus);
+              alert(XMLHttpRequest);
+              alert(errorThrown);
       }
+  });
+  return false;    
+}
+function agregarPapeldeTrabajo(){
+  clienteid = $('#form_prepararPapeles #EventosimpuestoClienteid').val();
+  id=0;
+  eventId = $('#form_prepararPapeles #EventosimpuestoEventoId').val();
+  eventId2= $('#form_prepararPapeles #EventosimpuestoId').val();
+  periodo = $('#periodoSel').val();
+  impcliid = $('#form_prepararPapeles #EventosimpuestoImpcliid').val();
+
+  montovto = $('#form_prepararPapeles #EventosimpuestoMontovto').val();
+  fchvto = $('#form_prepararPapeles #EventosimpuestoFchvto').val();
+  monc = $('#form_prepararPapeles #EventosimpuestoMonc').val();
+  descripcion = $('#form_prepararPapeles #EventosimpuestoDescripcion').val();
+
+  error="";
+  if(monc==""){
+    error+="Debe cargar monto/n";
+  }
+  if(fchvto==""){
+    error+="Debe cargar Fecha de Vencimiento/n";
+  }
+  if(eventId!=""){
+    id=eventId;
+  }
+  if(eventId2!=""){
+    id=eventId2;
+  }
+  if(error==""){
+   var datas =  eventId2+"/"+periodo+"/"+impcliid+"/"+montovto+"/"+fchvto+"/"+monc+"/"+descripcion;
+   var data ="";
+   $.ajax({
+         type: "post",  // Request method: post, get
+         url: serverLayoutURL+"/eventosimpuestos/realizartarea5/"+id+"/"+periodo+"/"+impcliid+"/"+montovto+"/"+fchvto+"/"+monc+"/"+descripcion, // URL to request
+         data: data,  // post data
+         success: function(response) {
+                      var resp = response.split("&&");
+                      var respuesta=resp[1];
+                      var error=resp[0];
+                     
+                      callAlertPopint(respuesta); 
+                 },
+         error:function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+                alert(XMLHttpRequest);
+                alert(errorThrown);
+        }
+    });
+    return false;    
+  }else{
+    callAlertPopint(error);
+    return false;    
+  }
 }  
 
-/*
-function showPagar(eventId,tarea,periodo,clienteid,impcliid){
-  $('#form_pagar #clienteid').val(clienteid)
-   $("#form_pagar #eventId").val(eventId);
-   $("#form_pagar #tarea").val(tarea);
-   $("#form_pagar #periodo").val(periodo);
-   $("#form_pagar #impcliid").val(impcliid);
-   location.href="#PIPagar";
-}*/
 function showPagar(periodo,impcli){
    var data = "";
        $.ajax({
@@ -206,7 +370,6 @@ function showPagar(periodo,impcli){
              url: serverLayoutURL+"/eventosimpuestos/getapagar/"+periodo+"/"+impcli, // URL to request
              data: data,  // post data
              success: function(response) {
-                      //alert(response);
                       $('#form_pagar').html(response);
                       location.href='#PIPagar';
                            },
@@ -255,9 +418,9 @@ function enviarPagar(){
                         var resp = response.split("&&");
                         var respuesta=resp[1];
                         var error=resp[0];
-                        alert("1: error: "+error+" respuesta: "+respuesta+" servResp: "+response);
+
                         if(error!=0){
-                          alert(respuesta);
+                          callAlertPopint(respuesta);
                           return;
                         }
                         if(eventId==0){
@@ -286,7 +449,7 @@ function enviarPagar(){
         });
         return false;    
       }else{
-        alert(error);
+        callAlertPopint(error);
         return false;    
 
       }
@@ -302,29 +465,3 @@ function getFunctionToShow(params,i){
   }  
   return func;
 }
-
-$(document).ready(function() {
-    var $table = $('#tbl_tareas');
-    $table.floatThead();
-
-    $( "input.datepicker" ).datepicker({
-      yearRange: "-100:+50",
-      changeMonth: true,
-      changeYear: true,
-      constrainInput: false,
-      showOn: 'both',
-      buttonImage: "",
-      dateFormat: 'dd-mm-yy',
-      buttonImageOnly: true
-    });
-    
-    $( "#clientesLclis" ).change(function(){
-      $("#clientesGclis option:selected").removeAttr("selected");
-      $("#clientesSelectby").val("clientes");       
-    });
-    $( "#clientesGclis" ).change(function(){
-      $("#clientesLclis option:selected").removeAttr("selected");
-      $("#clientesSelectby").val("grupos");
-    });
-    
-});

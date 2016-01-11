@@ -1,6 +1,6 @@
 <?php echo $this->Html->script('jquery-ui',array('inline'=>false));?>
 <?php echo $this->Html->script('clientes/informefinancierotributario',array('inline'=>false));?>
-<div id="Formhead" class="clientes informefinancierotributario index" style="margin-bottom:10px;">
+<div id="Formhead" class="clientes informefinancierotributario index" style="margin-bottom:10px; font-family: 'Arial'">
 
 	<!--<input class="button" type="button" id="btnHiddeForm" onClick="hideForm()" value="Ocultar" style="float:right;"/>-->
 	<?php echo $this->Form->create('clientes',array('action' => 'informefinancierotributario')); ?> 
@@ -58,12 +58,26 @@
           </td>
               <?php echo $this->Form->input('selectby',array('default'=>'none','type'=>'hidden'));//?>
 
-                <td rowspan="1"><?php echo $this->Form->end(__('Aceptar')); ?></td>
+
+               <?php 
+               $options = array(
+                    'label' => 'Aceptar',
+                    'div' => array(
+                        'class' => 'btn_acept',
+                    )
+                );
+
+                ?>
+
+                <!--<?php echo $this->Form->end(__('Aceptar')); ?>-->
+
+                <td rowspan="1"><?php echo $this->Form->end($options); ?> </td>
                 <?php if(isset($mostrarInforme)){?>
-                 <td rowspan="1">
+                
+                <td rowspan="1">
                     <?php echo $this->Form->button('Imprimir', 
                                             array('type' => 'button',
-                                                'class' =>"btn_add2",
+                                                'class' =>"btn_imprimir",
                                                 'onClick' => "imprimir()"
                                                 )
                         );?> 
@@ -155,26 +169,26 @@
 
     $totalGral = $totalActual+ $totalAnterior
     ?>
-<div class="index">
-<table id="situacionIntegral" class="tblInforme tblTributarioFinanciero">
-    <tr id="titulo" >
+<div class="index" id="index" style="font-size:14px;">
+<table id="situacionIntegral" class="tblInforme tblTributarioFinanciero" cellpadding="0" cellspacing="0">
+    <tr id="titulo">
         <td >
-            <label style='font-size:24px;font-family:"Times New Roman", Times, serif;font-weight:bold;text-align:center;'>Informe Tributario Financiero</label>
+            <label style='font-size:20px;font-weight:bold;text-align:center;'>Informe Tributario Financiero</label>
             
         </td>
     </tr><!-- fin titulo-->
-    <tr id="periodo" style='font-family:"Times New Roman", Times, serif;font-size:20px;text-align:left;'>
+    <tr id="periodo" style='text-align:left;'>
             <td>
-                <table width="100%" align="center" cellspacing="0" cellpadding="2"  >
+                <table id="tblit" width="100%" align="center" cellspacing="0" cellpadding="2"  >
                     <tr>                    
-                        <th width="150" style='font-family:"Times New Roman", Times, serif;font-size:20px;text-align:left;background:#FF0000background:#0C0' >
-                            Grupo: 
+                        <th width="150" style='text-align:left;background:#FFFFFF' >
+                            <lable>Grupo:</lable> 
                         </th>
                         <td width="271">
                             <?php echo $grupoclientesActual[0]['Grupocliente']["nombre"];?>
                         </td>                    
-                        <th colspan="2" style='font-family:"Times New Roman", Times, serif;font-size:20px;text-align:left;'>
-                            Periodo: <?php echo $periodomes."-".$periodoanio;?> 
+                        <th colspan="2" style='text-align:left;'>
+                            Periodo: <?php echo $periodomes."-".$periodoanio;?>
                         </th>
                     </tr> 
                     <tr>
@@ -183,36 +197,38 @@
                         </td>
                     </tr>
                     <tr><td></td>
-                        <td title="Acumulado de Recibos del Periodo">Recibos</td>
+                        <td title="Acumulado de Recibos del Periodo"><lable id="lblit">Recibos</label></td>
                         <td title="Acumulado de Recibos del Periodo" 
                             <?php if($recibosActuales>=0){echo "style='color:#0C0'";} 
                                     else{echo "style='color:#FF0000'";}
                             ?>
                             >
-                            <?php echo "$".number_format($recibosActuales, 2, ",", ".");?>
+                            <label id="lblit"><?php echo "$".number_format($recibosActuales, 2, ",", ".");?><label>
                         </td>
                      </tr>
                      <tr><td></td>
-                        <td title="Acumulado de Impuestos del Periodo">Impuestos</td>
+                        <td title="Acumulado de Impuestos del Periodo"><lable id="lblit">Impuestos</label></td>
                         <td title="Acumulado de Recibos del Periodo" style='color:#FF0000'>
-                            <?php echo "$".number_format($deudasActuales, 2, ",", "."); ?>
+                            <lable id="lblit"><?php echo "$".number_format($deudasActuales, 2, ",", "."); ?></label>
                         </td>
                      </tr>
                      <tr><td></td>
-                        <td title="Acumulado de Honorarios del Periodo">Honorarios</td>
+                        <td title="Acumulado de Honorarios del Periodo"><label id="lblit">Honorarios</label></td>
                         <td title="Acumulado de Honorarios del Periodo" style='color:#FF0000'>
-                            <?php echo "$".number_format($honorariosActuales, 2, ",", "."); //echo $qhonoact;?>
+                            <label id="lblit"><?php echo "$".number_format($honorariosActuales, 2, ",", "."); //echo $qhonoact;?></lable>
                         </td>
                      </tr>                     
                      <tr><td></td>
-                        <td title="Acumulado de Recibos-Impuestos-Honorarios del los Periodos Anteriores" >Periodo Ant.</td>
+                        <td title="Acumulado de Recibos-Impuestos-Honorarios del los Periodos Anteriores" ><label id="lblit">Periodo Ant.</label></td>
                         <td title="Acumulado de Recibos-Impuestos-Honorarios del los Periodos Anteriores" 
                             <?php if($totalAnterior>=0){
                                 echo "style='color:#0C0'";} 
                             else{
                                 echo "style='color:#FF0000'";}
                                 ?>   >
+                            <label id="lblit">    
                             <?php echo "$".number_format($totalAnterior, 2, ",", ".");?>
+                            </label>
                         </td>
                      </tr>
                      <tr><td></td>
@@ -237,12 +253,12 @@
     
     <tr>
         <td id="tdTotGral">
-            <table>
+            <table cellpadding="0" cellspacing="0" id="tblit">
                 <thead></thead>
                 <tbody>
                     <tr>
                         <td>
-                            <label style='font-family:"Times New Roman", Times, serif;font-size:20px;'>
+                            <label id="lblit">
                                 Totales Generales del Grupo: 
                             </label>
                         </td>
@@ -270,45 +286,45 @@
                     </tr>
                     <tr>
                         <td>
-                            <table style='padding:0px 0px 0px;width: 100%;' cellspacing="0">
+                            <table style='padding:0px 0px 0px;width: 100%;' cellspacing="0" id="tblit">
                                 <thead> </thead>
                                 <tbody>
                                     <tr>
                                         <th style='border:1px solid #333;text-align:left;' width="115">
-                                            Ingresos
+                                            <label id="lblit" >Ingresos</label>
                                         </th> 
                                         <td style='border:thin solid #333 ;text-align:right;' width="115">
-                                            <?php echo "$".number_format($ingresosTotal, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($ingresosTotal, 2, ",", ".")?></label>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th style='border:1px solid #333;text-align:left;' width="115">
-                                            Egresos
+                                            <label id="lblit" >Egresos</label>
                                         </th>
                                         <td style='border:thin solid #333 ;text-align:right;' width="115">
-                                            <?php echo "$".number_format($egresosTotal, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($egresosTotal, 2, ",", ".")?></label>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th style='border:1px solid #333;text-align:left;' width="115">
-                                            Impuestos
+                                            <label id="lblit" >Impuestos</label>
                                         </th>
                                         <td style='border:thin solid #333 ;text-align:right;' width="95"> 
-                                            <?php $totalPlanificado; echo "$".number_format($totalPlanificado, 2, ",", ".")?>
+                                            <lable><?php $totalPlanificado; echo "$".number_format($totalPlanificado, 2, ",", ".")?></label>
                                         </td>    
                                     </tr>
                                     <tr>
                                         <th style='border:1px solid #333;text-align:left;' width="115">
-                                            Saldo
+                                            <label id="lblit" >Saldo</label>
                                         </th>    
                                         <td style='border:thin solid #333 ;text-align:right;' width="115">
-                                            <?php $saldoTotal=$ingresosTotal-$egresosTotal-$totalPlanificado; 
-                                            echo "$".number_format($saldoTotal, 2, ",", ".");?>
+                                            <label id="lblit" ><?php $saldoTotal=$ingresosTotal-$egresosTotal-$totalPlanificado; 
+                                            echo "$".number_format($saldoTotal, 2, ",", ".");?></label>
                                         </td>
                                     </tr>               
                                 </tbody>
                              </table><!--fin tabla ingresos y egresos -->
-                             <table style='padding:0px 0px 0px; ' cellspacing="0">
+                             <table style='padding:0px 0px 0px; ' cellspacing="0" id="tblit">
                                 <thead>
                                     <tr>
                                                                                
@@ -316,25 +332,25 @@
                                 </thead>
                                 <tbody>                                                
                                     <tr>
-                                        <th style='border:1px solid #333;text-align:left;' width="115">Honorarios</th>   
-                                        <td style='border:thin solid #333 ;text-align:right;' width="115"><?php echo "$".number_format($honorariosTotal, 2, ",", ".")?></td>
+                                        <th style='border:1px solid #333;text-align:left;' width="115"><label id="lblit" >Honorarios</label></th>   
+                                        <td style='border:thin solid #333 ;text-align:right;' width="115"><label id="lblit" ><?php echo "$".number_format($honorariosTotal, 2, ",", ".")?></label></td>
                                     </tr>   
                                 </tbody>
                             </table>
                         </td>
                         <td>
-                            <table cellspacing="0" style='padding:0px 0px 0px;'>
+                            <table cellspacing="0" style='padding:0px 0px 0px;' id="tblit">
                                 <thead>
                                     <tr>    
-                                        <th style='border:1px solid #333;text-align:left;' width="115">Vencimientos</td>
-                                        <th style='border:1px solid #333;text-align:left;' width="115">A Pagar</th>
-                                        <th style='border:1px solid #333;text-align:left;' width="115">Pagado</th>
-                                        <th style='border:1px solid #333;text-align:left;' width="115">Saldo</th>
+                                        <th style='border:1px solid #333;text-align:left;' width="115"><label id="lblit" >Vencimientos</label></td>
+                                        <th style='border:1px solid #333;text-align:left;' width="115"><label id="lblit" >A Pagar</label></th>
+                                        <th style='border:1px solid #333;text-align:left;' width="115"><label id="lblit" >Pagado</label></th>
+                                        <th style='border:1px solid #333;text-align:left;' width="115"><label id="lblit" >Saldo</label></th>
                                     </tr>  
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style='border:1px solid #333;text-align:left;text-align:left'><label style='font-family:"Times New Roman", Times, serif;font-size:20px;'>hasta d&iacute;a 2</label></td>
+                                        <td style='border:1px solid #333;text-align:left;text-align:left'><label id="lblit">Hasta d&iacute;a 2</label></td>
                                         <?php
                                          
                                         $planificadoAl2=0;
@@ -376,74 +392,74 @@
                                             }
                                         }?>                                                                                        
                                         <td style='border:thin solid #333 ;text-align:right;'>
-                                            <?php echo "$".number_format($planificadoAl2, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($planificadoAl2, 2, ",", ".")?></label>
                                         </td>
                                         <td style='border:thin solid #333 ;text-align:right;'> 
-                                            <?php echo "$".number_format($pagadoAl2, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($pagadoAl2, 2, ",", ".")?></label>
                                         </td>
                                         <td style='border:thin solid #333 ;text-align:right;'> 
-                                            <?php 
+                                            <label id="lblit" ><?php 
                                             $diferencia2 = $planificadoAl2 - $pagadoAl2;
-                                            echo "$".number_format($diferencia2, 2, ",", ".")?>
+                                            echo "$".number_format($diferencia2, 2, ",", ".")?></label>
                                         </td>                                                                  
                                     </tr>
                                     <tr>
                                         <td style='border:1px solid #333;text-align:left;text-align:left'>
-                                            <label style='font-family:"Times New Roman", Times, serif;font-size:20px;'>
-                                                hasta d&iacute;a 7
+                                            <label id="lblit">
+                                                Hasta d&iacute;a 7
                                             </label>
                                         </td>
                                                                                                                                   
                                         <td style='border:thin solid #333 ;text-align:right;'>
-                                            <?php echo "$".number_format($planificadoAl7, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($planificadoAl7, 2, ",", ".")?></label>
                                         </td>
                                         <td style='border:thin solid #333 ;text-align:right;'> 
-                                            <?php echo "$".number_format($pagadoAl7, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($pagadoAl7, 2, ",", ".")?></label>
                                         </td>
                                         <td style='border:thin solid #333 ;text-align:right;'> 
-                                            <?php $diferencia7 = $planificadoAl7 - $pagadoAl7;
-                                            echo "$".number_format($diferencia7, 2, ",", ".")?>
+                                            <label id="lblit" ><?php $diferencia7 = $planificadoAl7 - $pagadoAl7;
+                                            echo "$".number_format($diferencia7, 2, ",", ".")?></label>
                                         </td>                                                                  
                                     </tr>
                                     <tr>
                                         <td style='border:1px solid #333;text-align:left;text-align:left'>
-                                            <label style='font-family:"Times New Roman", Times, serif;font-size:20px;'>
-                                                hasta d&iacute;a 12
+                                            <label id="lblit">
+                                                Hasta d&iacute;a 12
                                             </label>
                                         </td>
                                                                                                         
                                         <td style='border:thin solid #333 ;text-align:right;'>
-                                            <?php echo "$".number_format($planificadoAl12, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($planificadoAl12, 2, ",", ".")?></label>
                                         </td>
                                         <td style='border:thin solid #333 ;text-align:right;'> 
-                                            <?php echo "$".number_format($pagadoAl12, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($pagadoAl12, 2, ",", ".")?></label>
                                         </td>
                                         <td style='border:thin solid #333 ;text-align:right;'> 
-                                            <?php $diferencia12 = $planificadoAl12 - $pagadoAl12;
-                                            echo "$".number_format($diferencia12, 2, ",", ".")?>
+                                            <label id="lblit" ><?php $diferencia12 = $planificadoAl12 - $pagadoAl12;
+                                            echo "$".number_format($diferencia12, 2, ",", ".")?></label>
                                         </td>                                                                  
                                     </tr>
                                     <tr>
                                         <td style='border:1px solid #333;text-align:left;text-align:left'>
-                                            <label style='font-family:"Times New Roman", Times, serif;font-size:20px;'>
-                                                hasta d&iacute;a 18
+                                            <label id="lblit">
+                                                Hasta d&iacute;a 18
                                             </label>
                                         </td>
                                                                                                          
                                         <td style='border:thin solid #333 ;text-align:right;'>
-                                            <?php echo "$".number_format($planificadoAl18, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($planificadoAl18, 2, ",", ".")?></label>
                                         </td>
                                         <td style='border:thin solid #333 ;text-align:right;'> 
-                                            <?php echo "$".number_format($pagadoAl18, 2, ",", ".")?>
+                                            <label id="lblit" ><?php echo "$".number_format($pagadoAl18, 2, ",", ".")?></label>
                                         </td>
                                         <td style='border:thin solid #333 ;text-align:right;'> 
-                                            <?php $diferencia18 = $planificadoAl18 - $pagadoAl18;
-                                            echo "$".number_format($diferencia18, 2, ",", ".")?>
+                                            <label id="lblit" ><?php $diferencia18 = $planificadoAl18 - $pagadoAl18;
+                                            echo "$".number_format($diferencia18, 2, ",", ".")?></label>
                                         </td>                                                                  
                                     </tr>
                                     <tr>
                                         <td style='border:1px solid #333;text-align:left;'>
-                                            <label style='font-family:"Times New Roman", Times, serif;font-size:20px;'>
+                                            <label id="lblit">
                                                 Totales
                                             </label>
                                         </td>
@@ -467,25 +483,25 @@
     <!-- Inicio Tabla Cliente -->
     <tr class="cliente"  >          
         <td>
-            <table width="782">
+            <table width="782" cellpadding="0" cellspacing="0" id="tblit">
                 <tr>
-                    <th width="70" style='font-family:"Times New Roman", Times, serif;font-size:12px;text-align:left;'>
-                        <label style='font-family:"Times New Roman", Times, serif;font-size:20px;' >
+                    <th width="10%" style='text-align:left;'>
+                        <label id="lblit">
                             Cliente:
                         </label>
                     </th> 
-                    <td width="272">
-                        <label style='font-family:"Times New Roman", Times, serif;font-size:18px;' >
+                    <td width="50%">
+                        <label id="lblit">
                             <?php echo $cliente["nombre"];?>
                         </label>
                     </td>
-                    <th style='font-family:"Times New Roman", Times, serif;font-size:12px;text-align:left;' width="77">
-                        <label style='font-family:"Times New Roman", Times, serif;font-size:20px;' >
+                    <th style='text-align:left;' width="10%">
+                        <label id="lblit">
                             Cuit :
                         </label> 
                     </th>
-                    <td width="343">
-                        <label style='font-family:"Times New Roman", Times, serif;font-size:20px;' >
+                    <td width="40%">
+                        <label id="lblit">
                             <?php echo $cliente["cuitcontribullente"];?>
                         </label>
                     </td>
@@ -496,19 +512,19 @@
     </tr><!-- fin cliente -->
     <tr class="Ingresos">
         <td colspan="0">
-            <table style='padding:0px 0px;' cellspacing="0"   >
+            <table style='padding:0px 0px;' cellspacing="0"  id="tblit">
                 <tr>
                     <td valign="top">                                        
-                        <table style='padding:0px 0px;' cellspacing="0"   >
+                        <table style='padding:0px 0px;' cellspacing="0" id="tblit">
                             <thead>                      
                                 <tr>               
                                     <th style='border:1px solid #333;text-align:left;' width="125px">
-                                        <label style='font-family:"Times New Roman", Times, serif;font-size:20px;'>
+                                        <label id="lblit">
                                             Ingresos
                                         </label>
                                     </th>
                                     <th style='border:1px solid #333;text-align:left;' width="95px">
-                                        Importe
+                                        <label id="lblit" >Importe</label>
                                     </th>                     
                                 </tr>
                             </thead>
@@ -555,11 +571,11 @@
             <table>
                 <tr>
                     <td valign="top">
-                        <table style='padding:0px 0px;' cellspacing="0" >
+                        <table style='padding:0px 0px;' cellspacing="0" id="tblit">
                             <thead>  
                                 <tr>
                                     <th style='border:1px solid #333;text-align:left;' width="125px">
-                                        <label style='font-family:"Times New Roman", Times, serif;font-size:20px;'>
+                                        <label id="lblit">
                                             Egresos
                                         </label>
                                     </th>
@@ -611,11 +627,11 @@
     <!--INFORME RESUMEN TRIBUTARIO-->              
     <tr class="resultado" >
         <td> 
-            <table style='padding:0px 0px;' cellspacing="0"  >
+            <table style='padding:0px 0px;' cellspacing="0"  id="tblit">
                 <thead>
                     <tr>
                         <th style='border:1px solid #333;text-align:left;' width="125px">
-                            <label style='font-family:"Times New Roman", Times, serif;font-size:20px;'>
+                            <label id="lblit"> 
                                 Tributario
                             </label>
                         </th>
@@ -707,8 +723,8 @@
                         </td>                        
                     </tr>
                     <tr>
-                        <th style='font-family:"."'"."Times New Roman"."'".", Times, serif;font-size:20px; text-align:left' colspan='1' >
-                            <label >
+                        <th style='text-align:left' colspan='1' >
+                            <label id="lblit" >
                                 Mov. Neto: 
                             </label>
                         </th>

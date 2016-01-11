@@ -46,7 +46,7 @@ class Puntosdeventa extends AppModel {
 	public $hasMany = array(
 		'Venta' => array(
 			'className' => 'Venta',
-			'foreignKey' => 'puntosdeventa_id',
+			'foreignKey' => 'venta_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',

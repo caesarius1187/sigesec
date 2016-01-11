@@ -47,33 +47,118 @@ class ImpclisController extends AppController {
  */
 	public function add() {
 		$resp ="";
+		$this->loadModel('Periodosactivo');
 		if ($this->request->is('post')) {
 			$this->Impcli->create();
-			$this->request->data['Impcli']['desde'] = $this->request->data['Impcli']['mesdesde'].'-'.$this->request->data['Impcli']['aniodesde'];
-			$this->request->data['Impcli']['hasta'] = $this->request->data['Impcli']['meshasta'].'-'.$this->request->data['Impcli']['aniohasta'];
+			//tenemos que revisar si ya esta creado el impcli del impuesto seleccionado
+			//vamos a buscar un impcli con el impcli_id y el cliente_id que nos viene en $this->request->data
+			$id = 0;
+			$options = array(
+					'contain'=>array(
+						'Periodosactivo'=>array(
+												'conditions' => array(
+								                'Periodosactivo.hasta' => null, 
+								            ),
+						        	 	), 
+						'Impuesto'						
+						),
+					'conditions' => array(
+						'Impcli.impuesto_id'=> $this->request->data['Impcli']['impuesto_id'],
+						'Impcli.cliente_id'=> $this->request->data['Impcli']['cliente_id'],
+						)
+					);
+			$createdImp = $this->Impcli->find('first', $options);
+			$impcliCreado= false;
+			
+			if(count($createdImp)>0){
+				//el impcli ya esta creado por lo que ahora resta buscar los periodos activos y ver si se puede crear uno
+				$impcliCreado= true;
+				$this->set('impcliCreado','Error1: El impuesto ya esta relacionado, se cargo el periodo activo.');	
 
-			if ($this->Impcli->save($this->request->data)) {
-				$resp = $resp ."Se relaciono  impuesto para cliente.";
-				$impcli_id = $this->Impcli->getLastInsertID();
+				$id = $createdImp['Impcli']['id'];
+			}else{
+				//el impcli no existe y lo creamos por aqui
+				if ($this->Impcli->save($this->request->data)) {
+					$id = $this->Impcli->getLastInsertID();
+					$options = array(
+						'contain'=>array(
+							'Periodosactivo'=>array(
+												'conditions' => array(
+								                'Periodosactivo.hasta' => null, 
+								            ),
+						        	 	), 
+							'Impuesto'
+						),
+						'conditions' => array(
+							'Impcli.' . $this->Impcli->primaryKey => $id
+							)
+						);
+					$createdImp = $this->Impcli->find('first', $options);									
+				}
+				else{
+					$this->set('respuesta','Error: NO se relaciono impuesto para cliente. Intente de nuevo.');	
+					$this->autoRender=false; 
+					$this->layout = 'ajax';
+					$this->render('add');
+					return;
+				}
+			}		
+			//si pasa esos dos controles agregamos la fecha de alta como un nuevo periodoactivo
+			$periodoAbierto= false;
+			$altaContenidaEnPeriodo= false;
+			foreach ($createdImp['Periodosactivo'] as $periodoactivo) {
 
+				//tenemos que buscar los periodos activos.. si tiene uno sin cerrar no agregamos nada
+			    if(is_null($periodoactivo['hasta']) || empty($periodoactivo['hasta'])){
+			    	$periodoAbierto= true;
+			    }
+			    //hay 3 campos que pueden tener el valor de periodo alta: alta, altadgr, altadgrm
+			    //cualquiera de los 3 que sea != null se guarda en alta
+			    
+				//si tiene todos cerrados tenemos que ver que los periodos no contengan a la fecha de alta
+			    if($periodoactivo['desde'] <=  $this->request->data['Impcli']['alta']
+			    	&&
+			    	$periodoactivo['hasta'] >=  $this->request->data['Impcli']['alta']){
+			    	$altaContenidaEnPeriodo= true;
+			    }
 			}
-			else{
-				$resp = $resp ."NO se relaciono impuesto para cliente. Intente de nuevo";
+
+			if(!$periodoAbierto && !$altaContenidaEnPeriodo){
+				$this->Periodosactivo->create();
+				$this->Periodosactivo->set('impcli_id',$id);
+				$this->Periodosactivo->set('desde',$this->request->data['Impcli']['alta']);
+				if ($this->Periodosactivo->save()) {
+					$this->set('Periodoalta',$this->request->data['Impcli']['alta']);
+				}else{
+					$this->set('respuesta','Error: NO se pudo dar de alta el impuesto(440). Intentelo de nuevo mas tarde.');	
+					$this->autoRender=false; 
+					$this->layout = 'ajax';
+					$this->render('add');
+					return;
+				}
+			}else{
+				if($periodoAbierto){
+					$this->set('respuesta','Error: NO se pudo dar de alta el impuesto(ya existe un periodo activo abierto para este impuesto). Intentelo de nuevo mas tarde.');	
+				}else if($altaContenidaEnPeriodo){
+					$this->set('respuesta','Error: NO se pudo dar de alta el impuesto(el periodo de alta ya esta contenido en otro periodo activo). Intentelo de nuevo mas tarde.');	
+				}else{
+					$this->set('respuesta','Error: NO se pudo dar de alta el impuesto(441). Intentelo de nuevo mas tarde.');	
+				}
+				$this->autoRender=false; 
+				$this->layout = 'ajax';
+				$this->render('add');
+				return;
 			}
+			$this->set('impcli',$createdImp);
+			$this->autoRender=false; 		
 		}
-		$this->set('impcli_id',$impcli_id);
-		$this->set('respuesta',$resp);	
-
 		$this->layout = 'ajax';
-		$this->render('addajax');
+		$this->render('add');
 	}
 	public function addbancosindicato() {
-		
 		if ($this->request->is('post')) {
-
 			$this->request->data['Impcli']['desde'] = $this->request->data['Impcli']['mesdesde'].'-'.$this->request->data['Impcli']['aniodesde'];
 			$this->request->data['Impcli']['hasta'] = $this->request->data['Impcli']['meshasta'].'-'.$this->request->data['Impcli']['aniohasta'];
-
 			$this->Impcli->create();
 			if ($this->Impcli->save($this->request->data)) {
 				$this->Session->setFlash(__('Se relaciono  con exito.'));
@@ -116,60 +201,8 @@ class ImpclisController extends AppController {
 
 		$this->layout = 'ajax';
 		$this->render('addajax');
-	}/*
-	public function addajax($cliid = null,$impid = null,$desc= null,$desde = null,$hasta= null,
-		$id = null,$tipoorganismo = null,$estado= null,
-		$usuario = null,$clave = null,
-		$vencimiento = null,$descripcion = null,
-		$expediente = null,$observaciones = null) {
-	 	$this->request->onlyAllow('ajax');
-		$this->loadModel('Organismosxcliente');
-		$resp="";
-		$impcli_id="0";
-		if ($this->Organismosxcliente->exists($id)) {
-			$this->Organismosxcliente->read(null, $id);
-			$this->Organismosxcliente->set('tipoorganismo',$tipoorganismo);
-			$this->Organismosxcliente->set('estado',$estado);
-			$this->Organismosxcliente->set('usuario',$usuario);
-			$this->Organismosxcliente->set('clave',$clave);
-			$this->Organismosxcliente->set('vencimiento',date('Y-m-d',strtotime($vencimiento)));
-			$this->Organismosxcliente->set('descripcion',$descripcion);
-			$this->Organismosxcliente->set('expediente',$expediente);
-			$this->Organismosxcliente->set('observaciones',$observaciones);
-
-			if ($this->Organismosxcliente->save()) {
-				$resp= $resp."Organismo guardado.";	
-			} else {
-				$resp= $resp."Organismo NO guardado. Intente de nuevo";	
-			}
-		}else{
-			$resp= $resp."Organismo NO existe. Intente de nuevo" ;
-		}
-		if(($impid==0)||($impid==null)){
-			$resp = $resp ."No se relaciono ningun impuesto para cliente.";
-		}else{
-			$this->Impcli->create();
-			$this->Impcli->set('cliente_id',$cliid);
-			$this->Impcli->set('impuesto_id',$impid);
-			$this->Impcli->set('descripcion',$desc);
-			$this->Impcli->set('desde',$desde);
-			$this->Impcli->set('hasta',$hasta);
-			$this->Impcli->set('estado','habilitado');
-			if ($this->Impcli->save($this->request->data)) {
-				$resp = $resp ."Se relaciono  impuesto para cliente.";
-				$impcli_id = $this->Impcli->getLastInsertID();
-
-			}
-			else{
-				$resp = $resp ."NO se relaciono impuesto para cliente. Intente de nuevo";
-			}
-		}
-		$this->set('impcli_id',$impcli_id);
-		$this->set('respuesta',$resp);	
-
-		$this->layout = 'ajax';
-		$this->render('addajax');
-	}*/
+	}
+	
 /**
  * edit method
  *

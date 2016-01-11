@@ -13,7 +13,15 @@ $cakeDescription = __d('sigesec.com.ar', 'SIGESEC');
 <html>
 <head>
 	<script type="text/javascript">
-		var serverLayoutURL = "/sigesec";		
+		var serverLayoutURL = "";
+		function callAlertPopint(message){
+			location.hash ="#PopupMessage";
+			$(lblMessagePP).html(message);
+			setTimeout(function(){
+			  location.hash ="#x";
+			}, 3000); 
+			
+		}	
 	</script>
 	<?php echo $this->Html->charset(); ?>
 	<title>
@@ -88,7 +96,6 @@ $cakeDescription = __d('sigesec.com.ar', 'SIGESEC');
 																	)
 													); 	
 							?>		
-
 				        </li>
 				      </ul>
 				   	</li>			   
@@ -146,7 +153,16 @@ $cakeDescription = __d('sigesec.com.ar', 'SIGESEC');
 													); 	
 								?>
 							</li>	 
-							<li class='has-sub'><a href='#'  target='_blank'><span>Comparativo</span></a></li>
+							<li class='has-sub'>
+								<?php
+								echo $this->Html->link("Comparativo",
+																array(
+																	'controller' => 'clientes', 
+																	'action' => 'comparativo', 
+																	)
+													); 	
+								?>
+							</li>	 
 						</ul>
 					</li>
 					<li class='active has-sub'><a href='#'><span>Gestion</span></a>
@@ -181,9 +197,14 @@ $cakeDescription = __d('sigesec.com.ar', 'SIGESEC');
 			?>
 		</div>-->
 	</div>
-	<<a href="#x" class="overlay" id="PopupLoading"></a>
+	<a href="#x" class="overlay" id="PopupLoading"></a>
 		<div class="popupNews" id="loading">
         	<div id=""><?php echo $this->Html->image('progress.gif'); ?></div>
+        <div id="result"></div>
+    </div>
+    <a href="#x" class="overlay" id="PopupMessage"></a>
+		<div class="popup" id="alertMessage" style="padding:0px">
+        	<label id="lblMessagePP" style="margin:20px">this is a message</label>
         <div id="result"></div>
     </div>
 </div>

@@ -48,17 +48,28 @@ class DomiciliosController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Domicilio->create();
-			$this->request->data('Domicilio.fechainicio',date('Y-m-d',strtotime($this->request->data['Domicilio']['fechainicioagregardomicilio'])));
 			if ($this->Domicilio->save($this->request->data)) {
-				$this->Session->setFlash(__('The Domicilio has been saved.'));
-				return $this->redirect(array('controller'=>'clientes', 'action' => 'view',$this->request->data['Domicilio']['cliente_id']));
+				$id = $this->Domicilio->getLastInsertID();
+				$options = array(
+				 'contain'=>array(
+				      'Cliente',
+				      'Localidade'=>array(
+				         'Partido'=>array(
+				         ),
+						)									       
+				    ),
+				'conditions' => array(
+					'Domicilio.' . $this->Domicilio->primaryKey => $id
+					)
+				);
+				$this->set('domicilio', $this->Domicilio->find('first', $options));
 			} else {
-				$this->Session->setFlash(__('The Domicilio could not be saved. Please, try again.'));
+				$this->set('respuesta','El Domicilio No ha sido creado.');	
 			}
 		}
-		$clientes = $this->Domicilio->Cliente->find('list');
-		$localidades = $this->Domicilio->Localidade->find('list');
-		$this->set(compact('clientes', 'localidades'));
+				
+		$this->layout = 'ajax';
+		$this->render('addajax');
 	}
 	public function addajax(
 		$cliid = null,$tipo = null,$sede= null,$nombrefantasia= null,$puntodeventa= null,
@@ -115,18 +126,15 @@ class DomiciliosController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null) 
+	{
 		$this->loadModel('Partido');
 		if (!$this->Domicilio->exists($id)) {
 			throw new NotFoundException(__('Invalid direccione'));
 		}
 		if ($this->request->is('post')) {
-			$this->request->data['Domicilio']['fechainicio']=date('Y-m-d',strtotime($this->request->data['Domicilio']['fechainicio']));
 			if ($this->Domicilio->save($this->request->data)) {
-				$this->Session->setFlash(__('La direccion a sido modificada.'));
-				return $this->redirect(array('controller'=>'clientes', 'action' => 'view',$this->request->data['Domicilio']['cliente_id']));
 			} else {
-				$this->Session->setFlash(__('La direccion no a podido ser modificada, por favor intente de nuevo.'));
 			}
 		} else {
 			$options = array('conditions' => array('Domicilio.' . $this->Domicilio->primaryKey => $id));
@@ -135,11 +143,29 @@ class DomiciliosController extends AppController {
 		$clientes = $this->Domicilio->Cliente->find('list');
 		$partidos = $this->Partido->find('list');
 		$localidades = $this->Domicilio->Localidade->find('list');
-		$this->set(compact('clientes', 'localidades','partidos'));
+		$mostrarFormulario=false;
+
+		$options = array(
+			 'contain'=>array(
+			      'Cliente',
+			      'Localidade'=>array(
+			         'Partido'=>array(
+			         ),
+					)									       
+			    ),
+			'conditions' => array(
+				'Domicilio.' . $this->Domicilio->primaryKey => $id
+				)
+			);
+		$domicilio = $this->Domicilio->find('first', $options);
+		$this->set(compact('clientes', 'localidades','partidos','mostrarFormulario','domicilio'));
+		
+		$this->layout = 'ajax';
+		$this->render('edit');		
 	}
 
-	public function editajax(
-				$id=null,$cliid = null) {
+	public function editajax($id=null,$cliid = null) 
+	{
 		$this->loadModel('Partido');
 	 	//$this->request->onlyAllow('ajax');
 
@@ -161,7 +187,8 @@ class DomiciliosController extends AppController {
 								)
 			);
 		$localidades = $this->Domicilio->Localidade->find('list',$optionsLoc);
-		$this->set(compact('clientes', 'localidades','partidos'));
+		$mostrarFormulario=true;
+		$this->set(compact('clientes', 'localidades','partidos','mostrarFormulario'));
 
 		$this->layout = 'ajax';
 		$this->render('edit');	
@@ -174,16 +201,19 @@ class DomiciliosController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $cliid=null) {
 		$this->Domicilio->id = $id;
 		if (!$this->Domicilio->exists()) {
 			throw new NotFoundException(__('Invalid direccione'));
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Domicilio->delete()) {
-			$this->Session->setFlash(__('The direccione has been deleted.'));
+			$this->Session->setFlash(__('El domicilio a sido eliminado'));
 		} else {
-			$this->Session->setFlash(__('The direccione could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('No se ha podido eliminar el domicilio'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		return $this->redirect(array(
+			'controller'=>'clientes',
+			'action' => 'view',
+			$cliid));
 	}}

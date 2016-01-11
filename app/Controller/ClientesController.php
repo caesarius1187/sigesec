@@ -110,6 +110,16 @@ class ClientesController extends AppController {
 								                'Eventoscliente.periodo =' => $pemes.'-'.$peanio  
 								            ),
 							      	),
+							      'Honorario'=>array(
+							      		'conditions' => array(
+								                'Honorario.periodo =' => $pemes.'-'.$peanio  
+								            ),
+							      	),
+							      'Deposito'=>array(
+							      		'conditions' => array(
+								                'Deposito.periodo =' => $pemes.'-'.$peanio  
+								            ),
+							      	),
 							      'Impcli'=>array(
 							         'Impuesto'=>array(
 							            'fields'=>array('id','nombre'),
@@ -171,11 +181,12 @@ class ClientesController extends AppController {
 		$this->set(compact('gclis'));
 	
 	}
-	public function tareacargar($id=null,$periodo=null){
+	public function tareacargar($id=null,$periodo=null,$selectedBy=null){
 		// PRIMERO CHEKIAR QUE EL CLIENTE QUE MUESTRA LAS VENTAS SEA PARTE DEL ESTUDIO ACTIVO
 
 		$this->loadModel('Localidade');
 		$this->loadModel('Partido');
+		$this->loadModel('Grupocliente');
 		$cliente=$this->Cliente->find('first', array(
 				   'contain'=>array(
 				   		'Venta'=>array(					   			
@@ -231,6 +242,21 @@ class ClientesController extends AppController {
 
 		$alicuotas = array("10,50" => '10,50',"20,10" => '20,10',"50,50" => '50,50',);
 		$this->set('alicuotas', $alicuotas);
+
+		$conditionsGcli = array('Grupocliente.estudio_id' => $this->Session->read('Auth.User.estudio_id'),);
+		$gclis = $this->Grupocliente->find('list',array('conditions' =>$conditionsGcli));
+
+		$conditionsCli = array(
+							 'Grupocliente',
+							 );
+
+		$lclis = $this->Cliente->find('list',array(
+									'contain' =>$conditionsCli,
+									'conditions' => array(
+							 			'Grupocliente.estudio_id' => $this->Session->read('Auth.User.estudio_id')
+							 		)));
+		$this->set(compact('lclis'));
+		$this->set(compact('gclis'));
 	}
 	public function informepagosdelmes($data=null) {
 		$pemes="";
@@ -594,7 +620,70 @@ class ClientesController extends AppController {
 		$this->set(compact('gclis'));
 	
 	}
+/**
+ * comparativo method
+ *
+ * @throws NotFoundException
+ * @return void
+ */
+	public function comparativo(){
+		$this->loadModel('Grupocliente');
 
+		//para seleccion de clientes
+		$conditionsCli = array(
+							 'Grupocliente',
+							 );
+		$clienteses = $this->Grupocliente->find('list',array(
+									'conditions' => array(
+							 			'Grupocliente.estudio_id' => $this->Session->read('Auth.User.estudio_id'),
+							 							),
+									'order'=>array('Grupocliente.nombre')
+									)
+
+		);
+		$this->set('gclis',$clienteses);
+	}
+
+	public function comparativolistacliente(){
+		$clientes3=$this->Cliente->find('all', array(
+							   'contain'=>array(							      							     
+							      'Impcli'=>array(
+							         'Impuesto'=>array(
+							            'fields'=>array('id','nombre'),
+							             'conditions'=>array(
+
+							             	)
+							         ),
+						        	 'Eventosimpuesto'=>array(
+						        	 	'conditions' => array(
+						        	 		'Eventosimpuesto.periodo' => $this->request->data['clientes']['periodomes']."-".$this->request->data['clientes']['periodoanio']
+						        	 		),
+						        	 	'fields'=>array('id','impcli_id','monc','periodo','montovto'),
+						        	 	), 						        	 
+						        	 'conditions' => array(
+						        	 	'OR'=>array(
+								            	//'Impcli.id'=>$impuestoshabilitados,							            		
+								            	)
+								            ),
+						        	 'fields'=>array('id','cliente_id','impuesto_id'),
+									)									       
+							    ),
+							   'conditions' => array(
+							   					'Cliente.grupocliente_id'=>$this->request->data['clientes']['gclis'],
+							   					),
+							   'fields'=>array('id','nombre','grupocliente_id'),
+							   'order' => array(
+								                'Cliente.nombre'  
+								            ),
+
+							));
+			
+		$this->set('clientes', $clientes3);
+		$this->set('shownombre', $this->request->data['clientes']['shownombre']);
+		$this->autoRender=false; 				
+		$this->layout = 'ajax';
+		$this->render('comparativolistacliente');
+	}
 /**
  * view method
  *
@@ -609,6 +698,7 @@ class ClientesController extends AppController {
 		$this->loadModel('Cbus');
 		$this->loadModel('Puntosdeventa');
 		$this->loadModel('Subcliente');
+		$this->loadModel('Actividades');
 
 		if(!is_null($id)){
 			$conditionsCliAuth = array(
@@ -637,18 +727,28 @@ class ClientesController extends AppController {
 										      'Grupocliente',
 										      'Ingreso',	
 										      'Organismosxcliente',
-										      'Domicilio',
+										      'Domicilio'=>array(
+										      	'Localidade'=>array(
+										      			'Partido'
+										      		)
+										      	),
 										      'Personasrelacionada',
 										      'Subcliente',
   										      'Venta'=>array(										         
 									        	 'Subcliente', 
 										       ),
+  										      'Actividade'=>array(),
   										      'Puntosdeventa',
 										      'Impcli'=>array(
 										         'Impuesto'=>array(
 										            'fields'=>array('id','nombre','organismo'),								             
 										         ),
 									        	 'Eventosimpuesto', 
+									        	 'Periodosactivo'=>array(
+ 														'conditions' => array(
+											                'Periodosactivo.hasta' => null, 
+											            ),
+									        	 	), 
 										       ),
 										      'Deposito',
 										      'Honorario',
@@ -664,32 +764,107 @@ class ClientesController extends AppController {
 			$this->set('clientes', $clientes);
 
 					
-			$resAfip = $this->Impuesto->find('list', array(
-			    'conditions' => array('id NOT IN (SELECT impuesto_id FROM impclis WHERE cliente_id = '.$id.') 
-			    						AND organismo = "afip"' )
-					));
+			$resAfip = $this->Impuesto->find('all', 
+				array(
+				    'contain' => array(
+				    	'Impcli' => array(
+					    	'Periodosactivo'=>array(
+								'conditions' => array(
+				                	'Periodosactivo.hasta' => null, 					                	
+					            ),
+		        	 		), 
+		        	 		'conditions' => array(
+					                'cliente_id' => $id, 
+					            ),
+				    	),
+	    			),
+	    			'conditions' => array(
+					                'organismo' => 'afip',
+					            ),
+				)
+			);
 			$this->set('impuestosafip', $resAfip);
 
-			$resDGR = $this->Impuesto->find('list', array(
-			    'conditions' => array('id NOT IN (SELECT impuesto_id FROM impclis WHERE cliente_id = '.$id.')
-			    						AND organismo = "dgr"')
-					));
+			$resDGR = $this->Impuesto->find('all',array(
+				    'contain' => array(
+				    	'Impcli' => array(
+					    	'Periodosactivo'=>array(
+								'conditions' => array(
+					                'OR'=> array(
+						                	'Periodosactivo.hasta' => null, 
+					                	),
+					            ),
+		        	 		), 
+		        	 		'conditions' => array(
+					                'cliente_id' => $id, 
+					            ),
+				    	),
+	    			),
+	    			'conditions' => array(
+					                'organismo' => 'dgr',
+					            ),
+				)
+			);
 			$this->set('impuestosdgr', $resDGR);
-			$resDGRM = $this->Impuesto->find('list', array(
-			    'conditions' => array('id NOT IN (SELECT impuesto_id FROM impclis WHERE cliente_id = '.$id.')
-			    						AND organismo = "dgrm"')
-					));
+			
+			$resDGRM = $this->Impuesto->find('all',array(
+				    'contain' => array(
+				    	'Impcli' => array(
+					    	'Periodosactivo'=>array(
+								'conditions' => array(
+					                'Periodosactivo.hasta' => null, 
+					            ),
+		        	 		), 
+		        	 		'conditions' => array(
+					                'cliente_id' => $id, 
+					            ),
+				    	),
+	    			),
+	    			'conditions' => array(
+					                'organismo' => 'dgrm',
+					            ),
+				)
+			);
 			$this->set('impuestosdgrm', $resDGRM);
-			$resSINDICATO = $this->Impuesto->find('list', array(
-			    'conditions' => array('id NOT IN (SELECT impuesto_id FROM impclis WHERE cliente_id = '.$id.')
-			    						AND organismo = "sindicato"')
-					));
+
+			$resSINDICATO = $this->Impuesto->find('all',array(
+				    'contain' => array(
+				    	'Impcli' => array(
+					    	'Periodosactivo'=>array(
+								'conditions' => array(
+					                'Periodosactivo.hasta' => null, 
+					            ),
+		        	 		), 
+		        	 		'conditions' => array(
+					                'cliente_id' => $id, 
+					            ),
+				    	),
+	    			),
+	    			'conditions' => array(
+					                'organismo' => 'sindicato',
+					            ),
+				)
+			);
 			$this->set('impuestossindicato', $resSINDICATO);
 
-			$resBANCO = $this->Impuesto->find('list', array(
-			    'conditions' => array('id NOT IN (SELECT impuesto_id FROM impclis WHERE cliente_id = '.$id.')
-			    						AND organismo = "banco"')
-					));
+			$resBANCO = $this->Impuesto->find('all',array(
+				    'contain' => array(
+				    	'Impcli' => array(
+					    	'Periodosactivo'=>array(
+								'conditions' => array(
+					                'Periodosactivo.hasta' => null, 
+					            ),
+		        	 		), 
+		        	 		'conditions' => array(
+					                'cliente_id' => $id, 
+					            ),
+				    	),
+	    			),
+	    			'conditions' => array(
+					                'organismo' => 'banco',
+					            ),
+				)
+			);
 			$this->set('impuestosbancos', $resBANCO);
 
 
@@ -709,6 +884,15 @@ class ClientesController extends AppController {
 			$localidades = $this->Localidade->find('list',$optionsLoc);
 			$this->set('localidades', $localidades);
 			
+			$optionsAct = array(
+					'fields' => array(
+										'id','nombre'
+								)
+			);			
+
+			$actividades = $this->Actividades->find('list',$optionsAct);
+			$this->set('actividades', $actividades);
+
 			$optionsPdV = array('conditions' => array('Puntosdeventa.cliente_id' => $id));
 			$puntosdeventa = $this->Puntosdeventa->find('list',$optionsPdV);
 			$this->set('puntosdeventas', $puntosdeventa);
@@ -760,18 +944,18 @@ class ClientesController extends AppController {
 	public function habilitar($id=null) {
 		$this->Cliente->id = $id;		
 		if($this->Cliente->saveField('estado', 'habilitado')){
-					$this->Session->setFlash(__('El cliente a sido habilitado	.'.$id));
+					$this->Session->setFlash(__('El cliente a sido habilitado.'));
 		}else{
-					$this->Session->setFlash(__('El cliente NO a sido habilitado	.'.$id));
+					$this->Session->setFlash(__('El cliente NO a sido habilitado.'));
 		}
 		$this->redirect(array('action' => 'view'));	
 	}
 	public function deshabilitar($id=null) {
 		$this->Cliente->id = $id;		
 		if($this->Cliente->saveField('estado', 'deshabilitado')){
-					$this->Session->setFlash(__('El cliente a sido deshabilitado	.'.$id));
+					$this->Session->setFlash(__('El cliente a sido deshabilitado.'));
 		}else{
-					$this->Session->setFlash(__('El cliente NO a sido deshabilitado	.'.$id));
+					$this->Session->setFlash(__('El cliente NO a sido deshabilitado	.'));
 		}
 		$this->redirect(array('action' => 'view'));	
 	}
@@ -785,25 +969,25 @@ class ClientesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Cliente->create();
 
-			if($this->request->data['Cliente']['fchcorteejerciciofiscal']!="")
-			$this->request->data('Cliente.fchcorteejerciciofiscal',date('Y-m-d',strtotime($this->request->data['Cliente']['fchcorteejerciciofiscal'])));
+			//if($this->request->data['Cliente']['fchcorteejerciciofiscal']!="")
+			//$this->request->data('Cliente.fchcorteejerciciofiscal',date('Y-m-d',strtotime($this->request->data['Cliente']['fchcorteejerciciofiscal'])));
 			if($this->request->data['Cliente']['fchcumpleanosconstitucion']!="")
-			$this->request->data('Cliente.fchcumpleanosconstitucion',date('Y-m-d',strtotime($this->request->data['Cliente']['fchcumpleanosconstitucion'])));
-			if($this->request->data['Cliente']['inscripcionregistrocomercio']!="")
-			$this->request->data('Cliente.inscripcionregistrocomercio',date('Y-m-d',strtotime($this->request->data['Cliente']['inscripcionregistrocomercio'])));
+				$this->request->data('Cliente.fchcumpleanosconstitucion',date('Y-m-d',strtotime($this->request->data['Cliente']['fchcumpleanosconstitucion'])));
+			//if($this->request->data['Cliente']['inscripcionregistrocomercio']!="")
+			//	$this->request->data('Cliente.inscripcionregistrocomercio',date('Y-m-d',strtotime($this->request->data['Cliente']['inscripcionregistrocomercio'])));
 			if($this->request->data['Cliente']['fchiniciocliente']!="")
-			$this->request->data('Cliente.fchiniciocliente',date('Y-m-d',strtotime($this->request->data['Cliente']['fchiniciocliente'])));
+				$this->request->data('Cliente.fchiniciocliente',date('Y-m-d',strtotime($this->request->data['Cliente']['fchiniciocliente'])));
 			if($this->request->data['Cliente']['fchfincliente']!="")
-			$this->request->data('Cliente.fchfincliente',date('Y-m-d',strtotime($this->request->data['Cliente']['fchfincliente'])));
-			if($this->request->data['Cliente']['vtocaia']!="")
-			$this->request->data('Cliente.vtocaia',date('Y-m-d',strtotime($this->request->data['Cliente']['vtocaia'])));
-			if($this->request->data['Cliente']['vtocaib']!="")
-			$this->request->data('Cliente.vtocaib',date('Y-m-d',strtotime($this->request->data['Cliente']['vtocaib'])));
-			if($this->request->data['Cliente']['vtocaic']!="")
-			$this->request->data('Cliente.vtocaic',date('Y-m-d',strtotime($this->request->data['Cliente']['vtocaic'])));
+				$this->request->data('Cliente.fchfincliente',date('Y-m-d',strtotime($this->request->data['Cliente']['fchfincliente'])));
+			//if($this->request->data['Cliente']['vtocaia']!="")
+			//	$this->request->data('Cliente.vtocaia',date('Y-m-d',strtotime($this->request->data['Cliente']['vtocaia'])));
+			//if($this->request->data['Cliente']['vtocaib']!="")
+			//	$this->request->data('Cliente.vtocaib',date('Y-m-d',strtotime($this->request->data['Cliente']['vtocaib'])));
+			//if($this->request->data['Cliente']['vtocaic']!="")
+			//	$this->request->data('Cliente.vtocaic',date('Y-m-d',strtotime($this->request->data['Cliente']['vtocaic'])));
 
 			if ($this->Cliente->save($this->request->data)) {
-				$this->Session->setFlash(__('El cliente a sido guardado	.'.$fchcorteejerciciofiscal));
+				$this->Session->setFlash(__('El cliente a sido guardado	.'));
 
 				//Debemos crear 
 				$this->Organismosxcliente->create();
@@ -907,7 +1091,6 @@ class ClientesController extends AppController {
 	public function editajax($cliId = null,$nombre = null,$Dni= null,$Cuitcontribullente= null,$Numinscripcionconveniomultilateral= null,
 		$Tipopersona = null,$Tipopersonajuridica = null,$Fchcorteejerciciofiscal= null,$Fchcumpleanosconstitucion= null,$Anosduracion= null,
 		$Inscripcionregistrocomercio = null,$Modificacionescontrato = null,$Descripcionactividad= null,$Fchiniciocliente= null,$Fchfincliente= null) {
-
 
 	 	$this->request->onlyAllow('ajax');
 		//Configure::write('debug', 2);

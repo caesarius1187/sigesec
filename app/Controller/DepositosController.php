@@ -46,17 +46,64 @@ class DepositosController extends AppController {
  * @return void
  */
 	public function add() {
+		$resp ="";
+		$this->autoRender=false; 
 		if ($this->request->is('post')) {
+
+			$this->request->data('Deposito.fecha',date('Y-m-d',strtotime($this->request->data['Deposito']['fecha'])));				
+
 			$this->Deposito->create();
-			if ($this->Deposito->save($this->request->data)) {
-				$this->Session->setFlash(__('The deposito has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The deposito could not be saved. Please, try again.'));
+			$id = 0;
+			$options = array(
+					'conditions' => array(
+						'Deposito.id'=> $this->request->data['Deposito']['id'],
+						)
+					);
+			$createdDepo = $this->Deposito->find('first', $options);
+			$depoCreado= false;
+			
+			if(count($createdDepo)>0){
+				//el impcli ya esta creado por lo que ahora resta buscar los periodos activos y ver si se puede crear uno
+				$depoCreado= true;
+				$this->set('depoCreado','Error1: El deposito ya esta relacionado.');	
+				$id = $createdDepo['Deposito']['id'];
+				$this->set('ruta','deposito ya creado');
+			}else{
+				unset($this->request->data['Deposito']['id']);
+				$this->set('ruta','deposito NO creado');
+				
 			}
-		}
-		$clientes = $this->Deposito->Cliente->find('list');
-		$this->set(compact('clientes'));
+			if ($this->Deposito->save($this->request->data)) {
+					if(!$depoCreado){
+						$id = $this->Deposito->getLastInsertID();
+					}
+						
+					$options = array(
+						'conditions' => array(
+							'Deposito.' . $this->Deposito->primaryKey => $id
+							)
+						);
+					$createdDepo = $this->Deposito->find('first', $options);	
+					$this->set('deposito',$createdDepo);
+					$this->autoRender=false; 		
+					$this->layout = 'ajax';
+					$this->render('add');		
+					return;									
+				}
+				else {
+					$this->set('respuesta','Error: NO se creo el deposito. Intente de nuevo.');	
+					$this->autoRender=false; 
+					$this->layout = 'ajax';
+					$this->render('add');
+					return;
+				}
+		}	else {
+			$this->set('respuesta','Error: NO se creo el deposito. Intente de nuevo. (500)');	
+			$this->autoRender=false; 
+			$this->layout = 'ajax';
+			$this->render('add');
+			return;
+		}		
 	}
 	public function addajax($cliid = null,$fecha = null,$monto= null,$periodo= null,$desc= null) {
 	 	$this->request->onlyAllow('ajax');

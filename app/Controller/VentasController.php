@@ -46,7 +46,7 @@ class VentasController extends AppController {
 
 			$this->Venta->create();
 			if($this->request->data['Venta']['fecha']!="")
-				$this->request->data('Venta.fecha',date('Y-m-d',strtotime($this->request->data['Venta']['fecha'])));				
+				$this->request->data('Venta.fecha',date('Y-m-d',strtotime($this->request->data['Venta']['fecha'])));
 			if ($this->Venta->save($this->request->data)) {
 				$optionsPuntosDeVenta = array('conditions'=>array('Puntosdeventa.id' => $this->request->data['Venta']['puntosdeventa_id']));
 				$optionsSubCliente = array('conditions'=>array('Subcliente.id'=>$this->request->data['Venta']['subcliente_id']));
@@ -129,7 +129,6 @@ class VentasController extends AppController {
 
 		$this->layout = 'ajax';
 	}
-
 
 /**
  * delete method

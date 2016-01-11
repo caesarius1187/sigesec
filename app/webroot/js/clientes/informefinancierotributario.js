@@ -1,20 +1,16 @@
 function imprimir(){
-        Popup($('#situacionIntegral').html());
-    }
-
-    //Creates a new window and populates it with your content
-function Popup(data) {
-    //Create your new window
-    var w = window.open('', 'Imprimir', 'height=400,width=600');
-    w.document.write('<html><head><title>Informe Tributario Financiero</title>');
-    //Include your stylesheet (optional)
-    w.document.write('<link rel="stylesheet" href="cake.generic.css" type="text/css" />');
-    w.document.write('</head><body><table>');
-    //Write your content
-    w.document.write(data);
-    w.document.write('</table></body></html>');
-    w.print();
-    w.close();
-
-    return true;
+    $('#header').hide();
+    $('#Formhead').hide();  
+    $('#index').css('float','left');
+    $('#padding').css('padding','0px');
+    $('#index').css('font-size','10px');
+    $('#index').css('border-color','#FFF');
+    $('#situacionIntegral').css('padding','0px');
+    window.print();
+    $('#index').css('font-size','14px');
+    $('#header').show();
+    $('#Formhead').show();  
+    $('#index').css('float','right');
+    $('#padding').css('padding','10px 1%');
+    $('#situacionIntegral').css('padding','0px 10%');
 }

@@ -25,6 +25,7 @@
 }
 
 /** General Style Info **/
+
 body {
 	background: #FFF;
 	color: #fff;
@@ -116,7 +117,7 @@ p {
 	color: #333;
 	/*padding: 10px 20px 40px 20px;*/
 	overflow: auto;
-	min-height: 600px;
+	min-height: 400px;
 }
 #footer {
 	clear: both;
@@ -1220,7 +1221,9 @@ transition: all 0.4s ease-in-out;
 	border:1px solid #FFF;
 }
 
-
+.tbl_tareas img {
+	cursor: pointer;
+}
 /*Tabla impuestos*/
 .tbl_imp {
 	border-right:0;
@@ -1282,8 +1285,8 @@ transition: all 0.4s ease-in-out;
 }
 .tbl_tareaimp tr td {
 	padding: 8px 6px;
-	text-align: left;
-	vertical-align: top;
+	text-align: center;
+	vertical-align: center;
 	border:1px solid #FFF;
 }
 /*Table avance*/
@@ -1345,7 +1348,7 @@ transition: all 0.4s ease-in-out;
  }
 .cliente_view_tab_active{
 	
- 	width:33%;
+ 	width:31%;
  	height:100%;
  	float:left;
  	background-color: #1565c0;
@@ -1357,6 +1360,7 @@ transition: all 0.4s ease-in-out;
  	padding-right: 9px;
  
  }
+
 .tbl_view {
 	border-right:0;
 	clear: both;
@@ -1488,9 +1492,10 @@ transition: all 0.4s ease-in-out;
 }
 
 .imgedit{
-	margin: 0px auto;
-	width: 25px;
-	height: 25px;
+	float: left;
+	width: 24px;
+	height: 24px;
+	margin: 3px 5px;
 }
 
 .roundbutton:active {
@@ -1588,7 +1593,8 @@ transition: all 0.4s ease-in-out;
 
 /*Informe Tributario Financiero*/
 .tblInforme{
-	width: 60%;
+	width: 100%;
+    padding: 0 10%;
 }
 .tblTributarioFinanciero table {
  	background: white;
@@ -1723,10 +1729,8 @@ transition: all 0.4s ease-in-out;
     visibility: hidden;
     z-index: 109;
 }
-
 #bodyTablaVentas input{
 	max-width: 53px;
-	padding: 0px;
 }
 #bodyTablaVentas .submit{
 	max-width: 45px;
@@ -1743,12 +1747,128 @@ transition: all 0.4s ease-in-out;
 	padding: 0px;
 }
 #bodyTablaVentas tr td table tr td{
-	max-width: 80px;
-	min-width: 53px;
+	max-width: 80px;	
+	padding: 0px;
+}
+.tableVentaEditForm{
+	margin: 0 auto;
+}
+.tableVentaEditForm input{
+	margin: 0 auto;
+	max-width: 53px;
 	padding: 0px;
 }
 
-
-#tableVentaEditForm{
+#bodyTablaCompras input{
+	max-width: 53px;
+	padding: 0px;
+}
+#bodyTablaCompras .submit{
+	max-width: 45px;
+	float: left;
+	padding: 0px;
+	margin:0;
+}
+#bodyTablaCompras tr th{
+	max-width: 53px;
+	padding: 0px;
+}
+#bodyTablaCompras tr td{
+	max-width: 53px;
+	padding: 0px;
+}
+#bodyTablaCompras tr td table tr td{
+	max-width: 80px;	
+	padding: 0px;
+}
+.tableCompraEditForm{
 	margin: 0 auto;
+}
+.tableCompraEditForm input{
+	margin: 0 auto;
+	max-width: 53px;
+	padding: 0px;
+}
+.btn_realizar_tarea{
+	background-color: green;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border-color: green;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+
+
+.btn_acept input[type="submit"]{
+	background-color: #2196F3;
+    color: #fff;
+    padding: 0px 10px;
+    display: inline-block;
+    position: relative;
+    width: 120px;
+    height: 34px;
+    line-height: 32px;
+    border-radius: 2px;
+    font-size: 0.9em;
+    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: 0.2s;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    border: 1px solid #2196F3;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top:8px;
+}
+
+.btn_imprimir{
+	background-color: #FFF;
+    color: #2196F3;
+    padding: 0px 10px;
+    display: inline-block;
+    position: relative;
+    width: 120px;
+    height: 34px;
+    line-height: 32px;
+    border-radius: 2px;
+    font-size: 0.9em;
+    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: 0.2s;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    border: 1px solid #DDD;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.tbl_border td, th{
+	border: 1px solid #000;
+}
+
+.tbl_tareaimp img{
+	cursor: pointer;
+}
+
+.informefinancierotributario{
+	font-family: "Arial";
+}
+
+.tbl_papeles th{
+	font-size:13px;
+	border-bottom: 1px solid #ccc;
+	font-weight: normal;
+}
+.clsTabla{
+	border-spacing: 0;
+	width: 0px;
+}
+.tbl_getpagar{
+	margin-right: 12px;
+}
+
+.tbl_getpagar td, th{
+	border: 1px solid #FFF;
+	font-size: 12px
 }

@@ -39,8 +39,9 @@ if(!$mostrarForm) { ?>
                             'readonly'=>'readonly')
                      );?>                                
                 </td>
-                <td class="tdVentaComprobante">
-                    <table style="margin:0" cellspacing="0" cellpadding="0">                        
+                <td>
+                    <table style="margin:0" cellspacing="0" cellpadding="0">
+                        
                         <tr>
                             <td class="tareaCargarFormTD" style="padding:0"><?php             
                                 //Aca tenemos que sacar los tipos de comprobantes que el cliente puede emitir
@@ -121,13 +122,10 @@ if(!$mostrarForm) { ?>
                     echo $this->Form->input('total',array('label'=>'' ));     
                     ?>
                 </td>  
-                <td> 
-                    <?php echo $this->Form->end(__('+'),array('div'=>false)); ?>   
-                    <a href="#" class="btn_cancelar" onClick="hideFormModVenta('<?php echo $this->data['Venta']['id'];?>')" style="float: left;width: 45px;margin: 0;">X</a>
-                </td> 
+               
             </tr>   
         </table>
-             
+        <?php echo $this->Form->end(__('+')); ?>         
         
     </td>     
 <?php } ?>                      

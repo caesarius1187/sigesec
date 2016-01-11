@@ -21,7 +21,7 @@ class ClientesxcomprobantesController extends AppController {
  * @return void
  */
 	public function index() {
-		/*$this->Clientesxzxczxcomprobante->recursive = 0;
+		/*$this->Clientesxcomprobante->recursive = 0;
 		$this->set('Clientesxcomprobantes', $this->Paginator->paginate());*/
 	}
 
